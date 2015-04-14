@@ -20,7 +20,7 @@ pip-log.txt
 nosetests.xml
 
 # backup files
-*.*~
+*~
 
 # test images
 *.png
