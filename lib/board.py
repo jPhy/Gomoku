@@ -25,7 +25,7 @@ class Board(object):
     def __init__(self, width, height):
         self.width = int(width)
         self.height = int(height)
-        self.shape = (self.width, self.height)
+        self.shape = (self.height, self.width)
         self.board = np.zeros(self.shape, dtype='int8')
 
         self.moves_left = self.width * self.height
@@ -109,10 +109,13 @@ class Board(object):
             after EVERY move.
 
         """
-        for i in range(self.width-5):
-            for j in range(self.height-5):
+        for i in range(self.width):
+            for j in range(self.height):
                 for getter_function in (self.get_row, self.get_column, self.get_diagonal_lowleft_to_upright, self.get_diagonal_upleft_to_lowright):
-                    line = getter_function(i,j)
+                    try:
+                        line = getter_function(i,j)
+                    except IndexError:
+                        continue
                     if abs(line.sum()) == 5:
                         return line[0]
         return None

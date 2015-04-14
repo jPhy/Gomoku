@@ -12,11 +12,11 @@ class TestBoard(unittest.TestCase):
         height = 40
         board = Board(width, height)
 
-        self.assertEqual(board.shape, (width,height))
+        self.assertEqual(board.shape, (height,width))
         for i in range(width):
             for j in range(height):
                 # empty refers to "no stone laid" and should be defined in the module ``board``
-                self.assertEqual(board[i,j], empty)
+                self.assertEqual(board[j,i], empty)
 
     def test_lay_stone(self):
         width = height= 20
@@ -130,6 +130,5 @@ class TestGetLine(unittest.TestCase):
 
     def test_diagonal_upleft_to_lowright(self):
         diagonal = self.board.get_diagonal_upleft_to_lowright(1,4)
-        print(self.board[1,4])
         self.assertEqual(diagonal.shape, self.target_shape)
         np.testing.assert_equal(diagonal, np.array([white,white,black,empty,white]))
