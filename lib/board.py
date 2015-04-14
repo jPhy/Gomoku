@@ -28,6 +28,7 @@ class Board(object):
         self.shape = (self.width, self.height)
         self.board = np.zeros(self.shape, dtype='int8')
 
+        self.moves_left = self.width * self.height
         self.in_turn = white
 
     def __getitem__(self, key):
@@ -36,6 +37,8 @@ class Board(object):
     def __setitem__(self, key, value):
         if value == self.in_turn and self[key] == empty:
             self.in_turn = - self.in_turn
+            assert self.moves_left > 0
+            self.moves_left -= 1
             self.board[key] = value
 
         else: # invalid move
@@ -47,3 +50,10 @@ class Board(object):
                 raise InvalidMoveError('White is in turn')
             else:
                 raise RuntimeError('FATAL ERROR!')
+
+    def full(self):
+        "Return bool that indicates if the board has empty fields left"
+        if self.moves_left:
+            return False
+        else:
+            return True

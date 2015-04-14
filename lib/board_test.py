@@ -33,3 +33,22 @@ class TestBoard(unittest.TestCase):
 
         # place black stone at 5,5 is invalid since 5,5 is already occupied
         self.assertRaisesRegexp(InvalidMoveError, r'Position \(5, 5\) is already taken', place_stone, white, 5, 5)
+
+    def test_full(self):
+        width = height= 4
+        board = Board(width, height)
+        in_turn = white
+
+        for i in range(width):
+            for j in range(height):
+                board[i,j] = in_turn
+                if in_turn == white:
+                    in_turn = black
+                else:
+                    in_turn = white
+                if not (i,j) == (width-1, height-1):
+                    self.assertFalse(board.full())
+                else:
+                    self.assertTrue(board.full())
+
+        self.assertTrue(board.full())
