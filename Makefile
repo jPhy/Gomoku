@@ -67,16 +67,10 @@ check2 :
 	@ # run tests
 	nosetests-2.7 --processes=-1 --process-timeout=60
 
-	# run tests in parallel
-	mpirun -n 2 nosetests-2.7
-
 .PHONY : check3
 check3 :
 	@ # run tests
 	nosetests3 --processes=-1 --process-timeout=60
-
-	# run tests in parallel
-	mpirun -n 2 nosetests3
 
 .PHONY : check-fast
 check-fast : build
