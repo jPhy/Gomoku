@@ -30,6 +30,7 @@ class Board(object):
 
         self.moves_left = self.width * self.height
         self.in_turn = white
+        self.line = np.empty(5, dtype='int8')
 
     def __getitem__(self, key):
         return self.board[key]
@@ -57,3 +58,61 @@ class Board(object):
             return False
         else:
             return True
+
+    get_line_functions_docstring = """
+    Return an array from the position passed via `x` and `y` of length 5.
+
+    .. note::
+
+        The returned array is bound to the intance and NOT a copy.
+
+    :param x, y:
+
+        The indices of the left hand position to start the line.
+        The direction is defined by the function name.
+
+    """
+
+    def get_row(self, x, y):
+        __doc__ = self.get_line_functions_docstring
+        for i in range(5):
+            self.line[i] = self[x+i,y]
+        return self.line
+
+    def get_column(self, x, y):
+        __doc__ = self.get_line_functions_docstring
+        for i in range(5):
+            self.line[i] = self[x,y+i]
+        return self.line
+        assert False
+
+    def get_diagonal_lowleft_to_upright(self, x, y):
+        __doc__ = self.get_line_functions_docstring
+        for i in range(5):
+            self.line[i] = self[x+i,y+i]
+        return self.line
+
+    def get_diagonal_upleft_to_lowright(self, x, y):
+        __doc__ = self.get_line_functions_docstring
+        for i in range(5):
+            self.line[i] = self[x+i,y-i]
+        return self.line
+
+    def winner(self):
+        """
+        Return the winner or None
+
+        .. note::
+
+            If there are multiple lines of five, the first line that is found
+            will be designated as winner. Therefore you should check for winner
+            after EVERY move.
+
+        """
+        for i in range(self.width-5):
+            for j in range(self.height-5):
+                for getter_function in (self.get_row, self.get_column, self.get_diagonal_lowleft_to_upright, self.get_diagonal_upleft_to_lowright):
+                    line = getter_function(i,j)
+                    if abs(line.sum()) == 5:
+                        return line[0]
+        return None
