@@ -32,3 +32,26 @@ class Player(object):
                     pass
 
         raise RuntimeError('Could not find any valid move')
+
+class Human(Player):
+    """
+    A human player using a gui for input.
+
+    :param color:
+
+        The color that the player plays as described in "board.py".
+
+    :param board_gui:
+
+        The gui to be used for the input. Should be of type
+        ``BoardGui`` implemented in "gui.py".
+
+    """
+    def __init__(self, color, board_gui):
+        self.color = color
+        self.gui = board_gui
+
+    def make_move(self, board):
+        self.gui.renew_board()
+        self.gui.color_in_turn = self.color
+        self.gui.await_move()
