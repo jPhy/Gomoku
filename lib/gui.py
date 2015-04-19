@@ -4,12 +4,17 @@ Implement the game's gui
 """
 
 try:
-    import Tkinter as tk # python 2
+    # python 2
+    import Tkinter as tk
+    from tkMessageBox import Message
 except ImportError:
     import tkinter as tk # python 3
+    from tkinter.messagebox import Message
+
+gui_invalid_move_message = Message(message='Invalid move!', icon='error', title='Gomoku')
 
 import numpy as np
-from .board import black,white,empty
+from .board import black,white,empty , InvalidMoveError
 
 class BoardGui(object):
     """
@@ -32,7 +37,10 @@ class BoardGui(object):
         # create a grid of buttons
 
         def button_command(i,j):
-            self.board[j,i] = self.color_in_turn
+            try:
+                self.board[j,i] = self.color_in_turn
+            except InvalidMoveError:
+                gui_invalid_move_message.show()
 
         self.buttons = np.empty_like(board.board, dtype='object')
         for i in range(board.width):
