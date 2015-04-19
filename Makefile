@@ -13,13 +13,16 @@ help :
 	echo "    clean        delete compiled and temporary files"
 	echo "    coverage     produce and show a code coverage report"
 	echo "    help         show this message"
-	echo "    run          play Gomoku"
+	echo "    run          check game.py (execution as \"./game.py\","
+	echo "                 \"python2 game.py\" and \"python3 game.py\")"
 	echo "    show-todos   show todo marks in the source code"
 	echo
 
 .PHONY : run
 run : check
-	./game.py
+	./game.py ; \
+	python2 game.py ; \
+	python3 game.py
 
 .PHONY : clean
 clean:
