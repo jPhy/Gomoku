@@ -1,3 +1,3 @@
 'Gomoku game library'
 
-from . import board, player
+from . import board, player, gui
