@@ -12,7 +12,7 @@ class TestGame(unittest.TestCase):
         white = lib.board.white
         empty = lib.board.empty
 
-        board = lib.board.Board(width, height)
+        board = lib.board.Board(height, width)
         white_player = lib.player.Player(white)
         black_player = lib.player.Player(black)
 

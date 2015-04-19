@@ -10,13 +10,13 @@ class TestBoard(unittest.TestCase):
     def test_creation(self):
         width = 20
         height = 40
-        board = Board(width, height)
+        board = Board(height, width)
 
         self.assertEqual(board.shape, (height,width))
-        for i in range(width):
-            for j in range(height):
+        for i in range(height):
+            for j in range(width):
                 # empty refers to "no stone laid" and should be defined in the module ``board``
-                self.assertEqual(board[j,i], empty)
+                self.assertEqual(board[i,j], empty)
 
     def test_lay_stone(self):
         width = height= 20
@@ -36,7 +36,7 @@ class TestBoard(unittest.TestCase):
 
     def test_full(self):
         width = height= 4
-        board = Board(width, height)
+        board = Board(height, width)
         in_turn = white
 
         for i in range(width):
@@ -85,50 +85,50 @@ class TestGetLine(unittest.TestCase):
         height = 7
         self.board = Board(width=width, height=height)
 
-        # make column
+        # make row
         place_stone(self.board, white, 1,2)
         place_stone(self.board, black, 1,3)
         place_stone(self.board, white, 1,4)
         place_stone(self.board, black, 1,5)
         place_stone(self.board, white, 1,6)
 
-        # make row
+        # make column
         place_stone(self.board, black, 2,6)
         place_stone(self.board, white, 3,6)
         place_stone(self.board, black, 4,6)
         place_stone(self.board, white, 5,6)
         # leave (6,6) empty
 
-        # make diagonal lowleft to upright
+        # make diagonal upleft to lowright
         place_stone(self.board, black, 0,0)
         place_stone(self.board, white, 1,1)
         place_stone(self.board, black, 2,2)
         place_stone(self.board, white, 3,3)
         place_stone(self.board, black, 4,4)
 
-        # make diagonal upleft to lowright
-        # (1,4) is already white from "make column"
-        place_stone(self.board, white, 2,3)
-        place_stone(self.board, black, 3,2)
-        # leave (4,1) empty
+        # make diagonal lowleft to upright
         place_stone(self.board, white, 5,0)
-
-    def test_get_row(self):
-        row = self.board.get_row(2,6)
-        self.assertEqual(row.shape, self.target_shape)
-        np.testing.assert_equal(row, np.array([black,white,black,white,empty]))
+        # leave (4,1) empty
+        place_stone(self.board, black, 3,2)
+        place_stone(self.board, white, 2,3)
+        # (1,4) is already white from "make column"
 
     def test_get_column(self):
-        column = self.board.get_column(1,2)
+        column = self.board.get_column(2,6)
         self.assertEqual(column.shape, self.target_shape)
-        np.testing.assert_equal(column, np.array([white,black,white,black,white]))
+        np.testing.assert_equal(column, np.array([black,white,black,white,empty]))
 
-    def test_get_diagonal_lowleft_to_upright(self):
-        diagonal = self.board.get_diagonal_lowleft_to_upright(0,0)
+    def test_get_row(self):
+        row = self.board.get_row(1,2)
+        self.assertEqual(row.shape, self.target_shape)
+        np.testing.assert_equal(row, np.array([white,black,white,black,white]))
+
+    def test_get_diagonal_upleft_to_lowright(self):
+        diagonal = self.board.get_diagonal_upleft_to_lowright(0,0)
         self.assertEqual(diagonal.shape, self.target_shape)
         np.testing.assert_equal(diagonal, np.array([black,white,black,white,black]))
 
-    def test_diagonal_upleft_to_lowright(self):
-        diagonal = self.board.get_diagonal_upleft_to_lowright(1,4)
+    def test_diagonal_lowleft_to_upright(self):
+        diagonal = self.board.get_diagonal_lowleft_to_upright(5,0)
         self.assertEqual(diagonal.shape, self.target_shape)
-        np.testing.assert_equal(diagonal, np.array([white,white,black,empty,white]))
+        np.testing.assert_equal(diagonal, np.array([white,empty,black,white,white]))

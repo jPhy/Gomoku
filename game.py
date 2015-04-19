@@ -31,7 +31,7 @@ def play_game(white_player, black_player, game_board):
             return
 
 if __name__ == '__main__':
-    board = lib.board.Board(9,16)
+    board = lib.board.Board(16,9)
     window = tk.Tk()
     gui = lib.gui.BoardGui(board, window)
     player1 = lib.player.Human(lib.board.white, gui)

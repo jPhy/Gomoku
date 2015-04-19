@@ -17,18 +17,29 @@ class InvalidMoveError(Exception):
 
 class Board(object):
     """
-    Gomoku game board of the desired size (`width`, `height`).
-    Can access and place stones as ``self[x,y]``.
+    Gomoku game board of the desired size (`height`, `width`).
+    Can access and place stones as ``self[y,x]``, where ``y``
+    denotes the vertical and ``x`` the horizontal index.
     Check if attempted moves are valid.
+    Coordinate system:
+
+     ------------->  x
+    |
+    |
+    |
+    |
+    V
+
+    y
 
     """
-    def __init__(self, width, height):
-        self.width = int(width)
+    def __init__(self, height, width):
         self.height = int(height)
+        self.width = int(width)
         self.shape = (self.height, self.width)
         self.board = np.zeros(self.shape, dtype='int8')
 
-        self.moves_left = self.width * self.height
+        self.moves_left = self.height * self.width
         self.in_turn = white
         self.line = np.empty(5, dtype='int8')
 
@@ -66,36 +77,36 @@ class Board(object):
 
         The returned array is bound to the intance and NOT a copy.
 
-    :param x, y:
+    :param y, x:
 
         The indices of the left hand position to start the line.
         The direction is defined by the function name.
 
     """
 
-    def get_row(self, x, y):
+    def get_column(self, y, x):
         __doc__ = self.get_line_functions_docstring
         for i in range(5):
-            self.line[i] = self[x+i,y]
+            self.line[i] = self[y+i,x]
         return self.line
 
-    def get_column(self, x, y):
+    def get_row(self, y, x):
         __doc__ = self.get_line_functions_docstring
         for i in range(5):
-            self.line[i] = self[x,y+i]
+            self.line[i] = self[y,x+i]
         return self.line
         assert False
 
-    def get_diagonal_lowleft_to_upright(self, x, y):
+    def get_diagonal_upleft_to_lowright(self, y, x):
         __doc__ = self.get_line_functions_docstring
         for i in range(5):
-            self.line[i] = self[x+i,y+i]
+            self.line[i] = self[y+i,x+i]
         return self.line
 
-    def get_diagonal_upleft_to_lowright(self, x, y):
+    def get_diagonal_lowleft_to_upright(self, y, x):
         __doc__ = self.get_line_functions_docstring
         for i in range(5):
-            self.line[i] = self[x+i,y-i]
+            self.line[i] = self[y-i,x+i]
         return self.line
 
     def winner(self):
@@ -109,8 +120,8 @@ class Board(object):
             after EVERY move.
 
         """
-        for i in range(self.width):
-            for j in range(self.height):
+        for i in range(self.height):
+            for j in range(self.width):
                 for getter_function in (self.get_row, self.get_column, self.get_diagonal_lowleft_to_upright, self.get_diagonal_upleft_to_lowright):
                     try:
                         line = getter_function(i,j)
