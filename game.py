@@ -33,6 +33,7 @@ def play_game(white_player, black_player, game_board):
 if __name__ == '__main__':
     board = lib.board.Board(16,9)
     window = tk.Tk()
+    window.title('Gomoku')
     gui = lib.gui.BoardGui(board, window)
     player1 = lib.player.Human(lib.board.white, gui)
     player2 = lib.player.Human(lib.board.black, gui)
