@@ -95,7 +95,6 @@ class Board(object):
         for i in range(5):
             self.line[i] = self[y,x+i]
         return self.line
-        assert False
 
     def get_diagonal_upleft_to_lowright(self, y, x):
         __doc__ = self.get_line_functions_docstring

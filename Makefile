@@ -98,7 +98,7 @@ show-todos :
 	echo
 
 .PHONY : coverage
-coverage : .build-system-default
+coverage :
 	rm -rf coverage
-	nosetests --with-coverage --cover-package=pypmc --cover-html --cover-html-dir=coverage
+	nosetests --with-coverage --cover-package=. --cover-html --cover-html-dir=coverage
 	xdg-open coverage/index.html
