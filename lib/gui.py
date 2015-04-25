@@ -67,3 +67,10 @@ class BoardGui(object):
         moves_left = self.board.moves_left
         while self.board.moves_left == moves_left:
             self.window.update()
+
+    def highlight_lastmove(self):
+        """
+        Highlight the button with the coordinates of the last move.
+
+        """
+        self.buttons[self.board.lastmove].config(highlightbackground='yellow')
