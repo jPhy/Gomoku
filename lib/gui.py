@@ -68,6 +68,19 @@ class BoardGui(object):
         while self.board.moves_left == moves_left:
             self.window.update()
 
+    def highlight_winner(self, positions):
+        """
+        Highlight the buttons with the coordinates ``(y,x)``
+        (see board.py) passed via ``positions``
+
+        :param positions:
+            iterable if tuples with the coordinates as specified in
+            'board.py'
+
+        """
+        for y,x in positions:
+            self.buttons[y,x].config(highlightbackground='red')
+
     def highlight_lastmove(self):
         """
         Highlight the button with the coordinates of the last move.
