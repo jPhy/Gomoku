@@ -53,5 +53,7 @@ class Human(Player):
 
     def make_move(self, board):
         self.gui.renew_board()
+        if hasattr(board, 'lastmove'):
+            self.gui.highlight_lastmove()
         self.gui.color_in_turn = self.color
         self.gui.await_move()
