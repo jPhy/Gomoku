@@ -57,25 +57,26 @@ class TestBoard(unittest.TestCase):
         width = height= 10
         board = Board(width, height)
 
-        self.assertTrue(board.winner() is None)
+        self.assertEqual(board.winner(), (None, []))
         place_stone(board, white, 1,2)
-        self.assertTrue(board.winner() is None)
+        self.assertEqual(board.winner(), (None, []))
         place_stone(board, black, 0,2)
-        self.assertTrue(board.winner() is None)
+        self.assertEqual(board.winner(), (None, []))
         place_stone(board, white, 1,3)
-        self.assertTrue(board.winner() is None)
+        self.assertEqual(board.winner(), (None, []))
         place_stone(board, black, 0,3)
-        self.assertTrue(board.winner() is None)
+        self.assertEqual(board.winner(), (None, []))
         place_stone(board, white, 1,4)
-        self.assertTrue(board.winner() is None)
+        self.assertEqual(board.winner(), (None, []))
         place_stone(board, black, 0,4)
-        self.assertTrue(board.winner() is None)
+        self.assertEqual(board.winner(), (None, []))
         place_stone(board, white, 1,5)
-        self.assertTrue(board.winner() is None)
+        self.assertEqual(board.winner(), (None, []))
         place_stone(board, black, 0,5)
-        self.assertTrue(board.winner() is None)
+        self.assertEqual(board.winner(), (None, []))
         place_stone(board, white, 1,6)
-        self.assertTrue(board.winner() == white)
+        self.assertEqual(board.winner()[0], white)
+        self.assertEqual(board.winner()[1], [(1,2), (1,3), (1,4), (1,5), (1,6)])
 
 class TestGetLine(unittest.TestCase):
     def setUp(self):
@@ -114,21 +115,29 @@ class TestGetLine(unittest.TestCase):
         # (1,4) is already white from "make column"
 
     def test_get_column(self):
-        column = self.board.get_column(2,6)
+        column, positions = self.board.get_column(2,6)
+        target_positions = [(2,6), (3,6), (4,6), (5,6), (6,6)]
         self.assertEqual(column.shape, self.target_shape)
         np.testing.assert_equal(column, np.array([black,white,black,white,empty]))
+        self.assertEqual(positions, target_positions)
 
     def test_get_row(self):
-        row = self.board.get_row(1,2)
+        row, positions = self.board.get_row(1,2)
+        target_positions = [(1,2), (1,3), (1,4), (1,5), (1,6)]
         self.assertEqual(row.shape, self.target_shape)
         np.testing.assert_equal(row, np.array([white,black,white,black,white]))
+        self.assertEqual(positions, target_positions)
 
     def test_get_diagonal_upleft_to_lowright(self):
-        diagonal = self.board.get_diagonal_upleft_to_lowright(0,0)
+        diagonal, positions = self.board.get_diagonal_upleft_to_lowright(0,0)
+        target_positions = [(0,0), (1,1), (2,2), (3,3), (4,4)]
         self.assertEqual(diagonal.shape, self.target_shape)
         np.testing.assert_equal(diagonal, np.array([black,white,black,white,black]))
+        self.assertEqual(positions, target_positions)
 
     def test_diagonal_lowleft_to_upright(self):
-        diagonal = self.board.get_diagonal_lowleft_to_upright(5,0)
+        diagonal, positions = self.board.get_diagonal_lowleft_to_upright(5,0)
+        target_positions = [(5,0), (4,1), (3,2), (2,3), (1,4)]
         self.assertEqual(diagonal.shape, self.target_shape)
         np.testing.assert_equal(diagonal, np.array([white,empty,black,white,white]))
+        self.assertEqual(positions, target_positions)

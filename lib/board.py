@@ -71,11 +71,12 @@ class Board(object):
             return True
 
     get_line_functions_docstring = """
-    Return an array from the position passed via `x` and `y` of length 5.
+    Return an array from the position passed via `x` and `y` of length 5
+    and a list of the coordinates of that line.
 
     .. note::
 
-        The returned array is bound to the intance and NOT a copy.
+        The returned array is bound to the instance and NOT a copy.
 
     :param y, x:
 
@@ -88,29 +89,29 @@ class Board(object):
         __doc__ = self.get_line_functions_docstring
         for i in range(5):
             self.line[i] = self[y+i,x]
-        return self.line
+        return self.line, [(y+i,x) for i in range(5)]
 
     def get_row(self, y, x):
         __doc__ = self.get_line_functions_docstring
         for i in range(5):
             self.line[i] = self[y,x+i]
-        return self.line
+        return self.line, [(y,x+i) for i in range(5)]
 
     def get_diagonal_upleft_to_lowright(self, y, x):
         __doc__ = self.get_line_functions_docstring
         for i in range(5):
             self.line[i] = self[y+i,x+i]
-        return self.line
+        return self.line, [(y+i,x+i) for i in range(5)]
 
     def get_diagonal_lowleft_to_upright(self, y, x):
         __doc__ = self.get_line_functions_docstring
         for i in range(5):
             self.line[i] = self[y-i,x+i]
-        return self.line
+        return self.line, [(y-i,x+i) for i in range(5)]
 
     def winner(self):
         """
-        Return the winner or None
+        Return the winner and the positions of the five in a line or None.
 
         .. note::
 
@@ -123,9 +124,9 @@ class Board(object):
             for j in range(self.width):
                 for getter_function in (self.get_row, self.get_column, self.get_diagonal_lowleft_to_upright, self.get_diagonal_upleft_to_lowright):
                     try:
-                        line = getter_function(i,j)
+                        line, positions = getter_function(i,j)
                     except IndexError:
                         continue
                     if abs(line.sum()) == 5:
-                        return line[0]
-        return None
+                        return line[0], positions
+        return None, []
