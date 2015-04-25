@@ -38,7 +38,7 @@ def play_game(white_player, black_player, game_board):
             return winner, positions
 
 if __name__ == '__main__':
-    board = lib.board.Board(16,9)
+    board = lib.board.Board(16,13)
     window = tk.Tk()
     window.title('Gomoku')
     gui = lib.gui.BoardGui(board, window)
