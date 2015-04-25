@@ -52,6 +52,7 @@ class Board(object):
             assert self.moves_left > 0
             self.moves_left -= 1
             self.board[key] = value
+            self.lastmove = key
 
         else: # invalid move
             if   self[key] != empty:
