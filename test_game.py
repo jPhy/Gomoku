@@ -16,7 +16,7 @@ class TestGame(unittest.TestCase):
         white_player = lib.player.Player(white)
         black_player = lib.player.Player(black)
 
-        play_game(white_player, black_player, board)
+        winner, positions = play_game(white_player, black_player, board)
 
         target_final_board = np.array([
             [white, black, white, black],
@@ -33,4 +33,5 @@ class TestGame(unittest.TestCase):
 
         np.testing.assert_equal(board.board, target_final_board)
 
-        self.assertEqual(board.winner(), white)
+        self.assertEqual(winner, white)
+        self.assertEqual(positions, [(0,0), (1,0), (2,0), (3,0), (4,0)])
