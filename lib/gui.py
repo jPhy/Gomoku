@@ -8,7 +8,8 @@ try:
     import Tkinter as tk
     from tkMessageBox import Message
 except ImportError:
-    import tkinter as tk # python 3
+    # python 3
+    import tkinter as tk
     from tkinter.messagebox import Message
 
 gui_invalid_move_message = Message(message='Invalid move!', icon='error', title='Gomoku')
@@ -55,11 +56,11 @@ class BoardGui(object):
         for i in range(self.board.width):
             for j in range(self.board.height):
                 if self.board[j,i] == black:
-                    self.buttons[j,i].config(text='b') # TODO: image, use "self.buttons[j,i].config(imag=...)"
+                    self.buttons[j,i].config(background='black', activebackground='black', highlightthickness=3, highlightbackground='lightgray')
                 elif self.board[j,i] == white:
-                    self.buttons[j,i].config(text='w') # TODO: image, use "self.buttons[j,i].config(imag=...)"
+                    self.buttons[j,i].config(background='white', activebackground='white', highlightthickness=3, highlightbackground='lightgray')
                 elif self.board[j,i] == empty:
-                    self.buttons[j,i].config(text='  ') # TODO: image, use "self.buttons[j,i].config(imag=...)"
+                    self.buttons[j,i].config(background='darkgray', activebackground='darkgray', highlightthickness=3, highlightbackground='lightgray')
 
     def await_move(self):
         "Wait for one move to be taken"
