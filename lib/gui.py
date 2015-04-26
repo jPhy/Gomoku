@@ -28,7 +28,7 @@ class BoardGui(object):
 
     :param window:
 
-        The window to attach the Gui to (new window by default)
+        The window to attach the gui to.
 
     """
     def __init__(self, board, window):
