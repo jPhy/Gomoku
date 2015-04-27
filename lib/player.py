@@ -1,6 +1,14 @@
 "Define the base class for players to be used in the game"
 
 from .board import InvalidMoveError
+try:
+    # python 2
+    import Tkinter as tk
+    from tkMessageBox import Message
+except ImportError:
+    # python 3
+    import tkinter as tk
+    from tkinter.messagebox import Message
 
 class Player(object):
     """
@@ -14,24 +22,37 @@ class Player(object):
     def __init__(self, color):
         self.color = color
 
-    def make_move(self, board):
+    def make_move(self, gui):
         """
-        Place a stone onto the `board`
+        Place a stone onto the `board`.
+        This is a common function that *should not be overridden*.
+        Override ``_make_move`` instead.
 
-        :param board:
+        :param gui:
 
-            The game board as described in "board.py"
+            The game ``BoardGui`` as described in "gui.py"
 
         """
-        for i in range(board.shape[0]):
-            for j in range(board.shape[1]):
+        gui.renew_board()
+        if hasattr(gui.board, 'lastmove'):
+            gui.highlight_lastmove()
+        gui.color_in_turn = self.color
+        moves_left = gui.board.moves_left
+
+        self._make_move(gui)
+
+        if not moves_left - 1 == gui.board.moves_left:
+            raise RuntimeError('Could not find any valid move')
+
+    def _make_move(self, gui):
+        "Override this function for specific players"
+        for i in range(gui.board.shape[0]):
+            for j in range(gui.board.shape[1]):
                 try:
-                    board[i,j] = self.color
+                    gui.board[i,j] = self.color
                     return
                 except InvalidMoveError:
                     pass
-
-        raise RuntimeError('Could not find any valid move')
 
 class Human(Player):
     """
@@ -41,19 +62,12 @@ class Human(Player):
 
         The color that the player plays as described in "board.py".
 
-    :param board_gui:
-
-        The gui to be used for the input. Should be of type
-        ``BoardGui`` implemented in "gui.py".
-
     """
-    def __init__(self, color, board_gui):
-        self.color = color
-        self.gui = board_gui
-
-    def make_move(self, board):
-        self.gui.renew_board()
-        if hasattr(board, 'lastmove'):
-            self.gui.highlight_lastmove()
-        self.gui.color_in_turn = self.color
-        self.gui.await_move()
+    def _make_move(self, gui):
+        # wait for user input
+        moves_left = gui.board.moves_left
+        while gui.board.moves_left == moves_left:
+            try:
+                gui.window.update()
+            except tk.TclError:
+                exit(0)
