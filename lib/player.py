@@ -41,6 +41,9 @@ class Player(object):
 
         self._make_move(gui)
 
+        if not gui.board.in_game:
+            return
+
         if not moves_left - 1 == gui.board.moves_left:
             raise RuntimeError('Could not find any valid move')
 

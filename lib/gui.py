@@ -53,6 +53,14 @@ class BoardGui(object):
             for j in range(self.board.height):
                 self.buttons[j,i].config( command=lambda x=i, y=j: button_command(x,y) )
 
+    def game_running(self):
+        self.board.in_game = True
+        self.game_running_buttons()
+
+    def game_over(self):
+        self.board.in_game = False
+        self.game_over_buttons()
+
     def game_over_buttons(self):
         def button_command():
             Message(message='The game is already over!\nStart a new game first.', icon='error', title='Gomoku').show()
@@ -135,9 +143,10 @@ class MainWindow(tk.Tk):
                 exit(0)
 
     def new_game(self):
+        self.gui.game_running()
+
         self.board.reset()
         self.gui.renew_board()
-        self.gui.game_running_buttons()
         # white_player = player.Human(board.white)
         white_player = player.Player(board.white)
         black_player = player.Human(board.black)
@@ -168,7 +177,9 @@ class MainWindow(tk.Tk):
 
         self.gui.renew_board()
         self.gui.highlight_winner(positions)
-        if winner == white:
+        if not self.board.in_game:
+            return
+        elif winner == white:
             Message(message='White wins!', icon='info', title='Gomoku').show()
         elif winner == black:
             Message(message='Black wins!', icon='info', title='Gomoku').show()
@@ -177,7 +188,7 @@ class MainWindow(tk.Tk):
         else:
             raise RuntimeError('FATAL ERROR')
 
-        self.gui.game_over_buttons()
+        self.gui.game_over()
 
     def options(self):
         raise NotImplementedError
