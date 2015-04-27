@@ -18,6 +18,27 @@ class TestBoard(unittest.TestCase):
                 # empty refers to "no stone laid" and should be defined in the module ``board``
                 self.assertEqual(board[i,j], empty)
 
+    def test_reset(self):
+        width = 20
+        height = 40
+        board = Board(height, width)
+        place_stone(board, white, 5, 5)
+        place_stone(board, black, 4, 5)
+        place_stone(board, white, 4, 3)
+
+        self.assertEqual(board.in_turn, black)
+        self.assertFalse( (board.board == np.zeros([height, width]) ).all() )
+
+        board.reset()
+
+        self.assertEqual(board.in_turn, white)
+
+        self.assertEqual(board.shape, (height,width))
+        for i in range(height):
+            for j in range(width):
+                # empty refers to "no stone laid" and should be defined in the module ``board``
+                self.assertEqual(board[i,j], empty)
+
     def test_lay_stone(self):
         width = height= 20
         board = Board(width, height)

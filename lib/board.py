@@ -38,10 +38,16 @@ class Board(object):
         self.width = int(width)
         self.shape = (self.height, self.width)
         self.board = np.zeros(self.shape, dtype='int8')
+        self.line = np.empty(5, dtype='int8')
 
+        self.reset()
+
+    def reset(self):
+        self.board[:] = empty
         self.moves_left = self.height * self.width
         self.in_turn = white
-        self.line = np.empty(5, dtype='int8')
+        if hasattr(self, 'lastmove'):
+            del self.lastmove
 
     def __getitem__(self, key):
         return self.board[key]
