@@ -61,5 +61,5 @@ class Human(Player):
     def _make_move(self, gui):
         # wait for user input
         moves_left = gui.board.moves_left
-        while gui.board.moves_left == moves_left:
-            gui.window.update()
+        while gui.board.moves_left == moves_left and gui.in_game:
+            gui.update()

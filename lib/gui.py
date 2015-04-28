@@ -51,6 +51,16 @@ class BoardGui(object):
         The window to attach the gui to.
 
     """
+    # TODO: duplicate - copy from class ``Window``
+    def update(self, *args, **kwargs):
+        try:
+            tk.Canvas.update(self.window, *args, **kwargs)
+        except tk.TclError as err:
+            if 'has been destroyed' in err.message:
+                exit(0)
+            else:
+                raise err
+
     def __init__(self, board, window):
         self.board = board
         self.window = window
@@ -80,13 +90,19 @@ class BoardGui(object):
         self.in_game = False
         self.game_over_buttons()
 
-    def game_over_buttons(self):
+    def game_message_buttons(self, message):
         def button_command():
-            Message(message='The game is already over!\nStart a new game first.', icon='error', title='Gomoku').show()
+            Message(message=message, icon='error', title='Gomoku').show()
 
         for i in range(self.board.width):
             for j in range(self.board.height):
                 self.buttons[j,i].config(command=button_command)
+
+    def game_over_buttons(self):
+        self.game_message_buttons('The game is already over!\nStart a new game first.')
+
+    def game_paused_buttons(self):
+        self.game_message_buttons('Close the options dialog first.')
 
     def renew_board(self):
         "Draw the stone symbols onto the buttons"
@@ -119,7 +135,7 @@ class BoardGui(object):
         """
         self.buttons[self.board.lastmove].config(highlightbackground='yellow')
 
-class MainWindow(tk.Tk):
+class MainWindow(Window):
     """
     Gui of Gomoku; the main window.
 
@@ -132,33 +148,40 @@ class MainWindow(tk.Tk):
         self.width = width
         self.height = height
 
-        tk.Tk.__init__(self)
+        Window.__init__(self)
         self.title('Gomoku')
 
         self.canvas_board = tk.Canvas(self)
         self.canvas_board.pack()
 
-        self.canvas_controls = tk.Canvas(self)
-        self.canvas_controls.pack(side='bottom')
-        self.new_game_button = tk.Button(self.canvas_controls, text='New game', command=self.new_game)
-        self.new_game_button.grid(column=0, row=0)
-        self.options_button = tk.Button(self.canvas_controls, text='Options', command=self.options)
-        self.options_button.grid(column=1, row=0)
-        self.exit_button = tk.Button(self.canvas_controls, text='Exit', command=self.exit)
-        self.exit_button.grid(column=2, row=0)
-
         self.board = board.Board(self.width,self.height)
         self.gui = BoardGui(self.board, self.canvas_board)
 
-    def exit(self):
-        self.destroy()
+        self.canvas_controls = tk.Canvas(self)
+        self.canvas_controls.pack(side='bottom')
+        self.new_game_button = tk.Button(self.canvas_controls, text='New game')
+        self.new_game_button.grid(column=0, row=0)
+        self.options_button = tk.Button(self.canvas_controls, text='Options')
+        self.options_button.grid(column=1, row=0)
+        self.exit_button = tk.Button(self.canvas_controls, text='Exit')
+        self.exit_button.grid(column=2, row=0)
+        self.activate_buttons()
+
+        self.start_new_game = True
 
     def mainloop(self):
-        self.new_game()
         while True:
-            self.update()
+            while not self.start_new_game:
+                if not self.update():
+                    return
+            self.start_new_game = False
+            self.play_game()
 
     def new_game(self):
+        self.gui.game_over()
+        self.start_new_game = True
+
+    def play_game(self):
         self.gui.game_running()
 
         self.board.reset()
@@ -172,14 +195,20 @@ class MainWindow(tk.Tk):
 
         while True:
             white_player.make_move(self.gui)
-            self.gui.window.update()
+            if not self.gui.in_game:
+                # game aborted
+                return
+            self.gui.update()
 
             winner, positions = self.board.winner()
             if (winner is not None) or (self.board.full()):
                 break
 
             black_player.make_move(self.gui)
-            self.gui.window.update()
+            if not self.gui.in_game:
+                # game aborted
+                return
+            self.gui.update()
 
             winner, positions = self.board.winner()
             if (winner is not None) or (self.board.full()):
@@ -200,5 +229,37 @@ class MainWindow(tk.Tk):
 
         self.gui.game_over()
 
+    def buttons_option_mode(self):
+        def new_game_button_command():
+            Message(message='Close the options dialog first.', icon='error', title='Gomoku').show()
+
+        def options_button_command():
+            Message(message='The options dialog is already open!', icon='error', title='Gomoku').show()
+
+        self.gui.game_paused_buttons()
+        self.new_game_button.config(command=new_game_button_command)
+        self.options_button.config(command=options_button_command)
+        self.exit_button.config(command=self.destroy)
+
+    def activate_buttons(self):
+        self.gui.game_running_buttons()
+        self.new_game_button.config(command=self.new_game)
+        self.options_button.config(command=self.options)
+        self.exit_button.config(command=self.destroy)
+
     def options(self):
-        raise NotImplementedError
+        self.buttons_option_mode()
+        # open_options_dialog()
+
+        options_dialog = Window() # TODO: program a useful options dialog
+        while options_dialog.update():
+            try:
+                self.state()
+            except tk.TclError as err:
+                if 'has been destroyed' in err.message:
+                    options_dialog.destroy()
+                    return
+                raise err
+
+        self.activate_buttons()
+        # raise NotImplementedError
