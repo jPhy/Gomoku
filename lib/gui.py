@@ -54,11 +54,11 @@ class BoardGui(object):
                 self.buttons[j,i].config( command=lambda x=i, y=j: button_command(x,y) )
 
     def game_running(self):
-        self.board.in_game = True
+        self.in_game = True
         self.game_running_buttons()
 
     def game_over(self):
-        self.board.in_game = False
+        self.in_game = False
         self.game_over_buttons()
 
     def game_over_buttons(self):
@@ -177,7 +177,7 @@ class MainWindow(tk.Tk):
 
         self.gui.renew_board()
         self.gui.highlight_winner(positions)
-        if not self.board.in_game:
+        if not self.gui.in_game:
             return
         elif winner == white:
             Message(message='White wins!', icon='info', title='Gomoku').show()
