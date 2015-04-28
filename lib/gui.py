@@ -12,6 +12,25 @@ except ImportError:
     import tkinter as tk
     from tkinter.messagebox import Message
 
+class Window(tk.Tk):
+    "Wrapper for the basic window"
+    def update(self, *args, **kwargs):
+        """
+        Extend the base method ``update``.
+
+        Return ``True`` if the window is still open, return ``False``
+        if the window has been destroyed.
+
+        """
+        try:
+            tk.Tk.update(self, *args, **kwargs)
+            return True
+        except tk.TclError as err:
+            if 'has been destroyed' in err.message:
+                return False
+            else:
+                raise err
+
 gui_invalid_move_message = Message(message='Invalid move!', icon='error', title='Gomoku')
 
 import numpy as np
