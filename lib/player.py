@@ -1,14 +1,6 @@
 "Define the base class for players to be used in the game"
 
 from .board import InvalidMoveError
-try:
-    # python 2
-    import Tkinter as tk
-    from tkMessageBox import Message
-except ImportError:
-    # python 3
-    import tkinter as tk
-    from tkinter.messagebox import Message
 
 class Player(object):
     """
