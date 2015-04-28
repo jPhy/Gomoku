@@ -137,10 +137,7 @@ class MainWindow(tk.Tk):
     def mainloop(self):
         self.new_game()
         while True:
-            try:
-                self.update()
-            except tk.TclError:
-                exit(0)
+            self.update()
 
     def new_game(self):
         self.gui.game_running()
@@ -156,20 +153,14 @@ class MainWindow(tk.Tk):
 
         while True:
             white_player.make_move(self.gui)
-            try:
-                self.gui.window.update()
-            except tk.TclError:
-                exit(0)
+            self.gui.window.update()
 
             winner, positions = self.board.winner()
             if (winner is not None) or (self.board.full()):
                 break
 
             black_player.make_move(self.gui)
-            try:
-                self.gui.window.update()
-            except tk.TclError:
-                exit(0)
+            self.gui.window.update()
 
             winner, positions = self.board.winner()
             if (winner is not None) or (self.board.full()):

@@ -70,7 +70,4 @@ class Human(Player):
         # wait for user input
         moves_left = gui.board.moves_left
         while gui.board.moves_left == moves_left:
-            try:
-                gui.window.update()
-            except tk.TclError:
-                exit(0)
+            gui.window.update()
