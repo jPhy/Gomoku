@@ -26,7 +26,7 @@ class Window(tk.Tk):
             tk.Tk.update(self, *args, **kwargs)
             return True
         except tk.TclError as err:
-            if 'has been destroyed' in err.message:
+            if 'has been destroyed' in err.args[0]:
                 return False
             else:
                 raise err
@@ -57,7 +57,7 @@ class BoardGui(object):
         try:
             tk.Canvas.update(self.window, *args, **kwargs)
         except tk.TclError as err:
-            if 'has been destroyed' in err.message:
+            if 'has been destroyed' in err.args[0]:
                 exit(0)
             else:
                 raise err
@@ -273,7 +273,7 @@ class MainWindow(Window):
             try:
                 self.state()
             except tk.TclError as err:
-                if 'has been destroyed' in err.message:
+                if 'has been destroyed' in err.args[0]:
                     options_dialog.destroy()
                     return
                 raise err
