@@ -268,7 +268,7 @@ class MainWindow(Window):
     def options(self): # button command
         self.buttons_option_mode()
 
-        options_dialog = Window() # TODO: program a useful options dialog
+        options_dialog = OptionsDialog()
         while options_dialog.update():
             try:
                 self.state()
@@ -281,3 +281,51 @@ class MainWindow(Window):
         self.activate_buttons()
         if not self.gui.in_game:
             self.gui.game_over()
+
+class OptionsDialog(Window):
+    """
+    Show a dialog to set the game options.
+    Return a dictionary of options.
+
+    """
+    def __init__(self):
+        Window.__init__(self)
+        self.title('Gomoku - Options')
+
+        width = 250
+        height = 10
+
+        self.topspace = tk.Canvas(self, height=height, width=width)
+        self.topspace.pack()
+
+        player_width  = 100
+        player_height =  20
+
+        available_white_players = ('a', 'b', 'c')
+        available_black_players = ('x', 'y', 'z')
+
+        self.cv_options = tk.Canvas(self)
+        self.cv_options.pack()
+
+        self.canvas_white_player = tk.Canvas(self.cv_options, width=player_width, height=player_height)
+        self.canvas_white_player.create_text(40,10, text='white player')
+        self.canvas_white_player.grid(column=0,row=0)
+        self.desired_white_player = tk.Variable(value='current value') # TODO: set old value here
+        self.dialog_white_player = tk.OptionMenu(self.cv_options, self.desired_white_player, *available_white_players)
+        self.dialog_white_player.grid(column=1,row=0)
+
+        self.canvas_black_player = tk.Canvas(self.cv_options, width=player_width, height=player_height)
+        self.canvas_black_player.create_text(40,10, text='black player')
+        self.canvas_black_player.grid(column=0,row=1)
+        self.desired_black_player = tk.Variable(value='current value') # TODO: set old value here
+        self.dialog_black_player = tk.OptionMenu(self.cv_options, self.desired_black_player, *available_black_players)
+        self.dialog_black_player.grid(column=1,row=1)
+
+        self.middlespace = tk.Canvas(self, height=height+5, width=width)
+        self.middlespace.pack()
+
+        self.button_close = tk.Button(self, text='Done', command=self.destroy)
+        self.button_close.pack()
+
+        self.bottomspace = tk.Canvas(self, height=height, width=width)
+        self.bottomspace.pack()
