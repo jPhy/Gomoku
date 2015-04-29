@@ -51,7 +51,8 @@ class BoardGui(object):
         The window to attach the gui to.
 
     """
-    # TODO: duplicate - copy from class ``Window``
+    # This is NOT a duplicate from class ``Window``
+    # Note that this function has an exit(0), not a return
     def update(self, *args, **kwargs):
         try:
             tk.Canvas.update(self.window, *args, **kwargs)
@@ -82,6 +83,8 @@ class BoardGui(object):
             for j in range(self.board.height):
                 self.buttons[j,i].config( command=lambda x=i, y=j: button_command(x,y) )
 
+    # Note: the variable ``in_game`` is used to break loops that wait for user interactions
+
     def game_running(self):
         self.in_game = True
         self.game_running_buttons()
@@ -91,6 +94,10 @@ class BoardGui(object):
         self.game_over_buttons()
 
     def game_message_buttons(self, message):
+        """
+        Deactivate the game buttons; show error message ``message`` if pressed.
+
+        """
         def button_command():
             Message(message=message, icon='error', title='Gomoku').show()
 
@@ -170,28 +177,37 @@ class MainWindow(Window):
         self.start_new_game = True
 
     def mainloop(self):
+        # run until the user exits the program
         while True:
+            # Start a new game only if desired by user.
+            # This bootstrap prevents the deletion of the old game board
+            # until the user presses the 'New game' button.
             while not self.start_new_game:
                 if not self.update():
                     return
             self.start_new_game = False
             self.play_game()
 
-    def new_game(self):
+    def new_game(self): # button command
         self.gui.game_over()
         self.start_new_game = True
 
     def play_game(self):
+        "Run a game of gomoku"
+        # enter "in_game" mode
         self.gui.game_running()
 
+        # remove all stones from the board
         self.board.reset()
         self.gui.renew_board()
+
+        # set the players
+        # TODO: players should be customizable in options dialog
+        #       as arguments of ``play_game``?
         # white_player = player.Human(board.white)
         white_player = player.Player(board.white)
         black_player = player.Human(board.black)
         # black_player = player.Player(board.black)
-
-        moves_left = self.board.moves_left
 
         while True:
             white_player.make_move(self.gui)
@@ -217,6 +233,7 @@ class MainWindow(Window):
         self.gui.renew_board()
         self.gui.highlight_winner(positions)
         if not self.gui.in_game:
+            # game aborted
             return
         elif winner == white:
             Message(message='White wins!', icon='info', title='Gomoku').show()
@@ -227,6 +244,7 @@ class MainWindow(Window):
         else:
             raise RuntimeError('FATAL ERROR')
 
+        # end "in_game" mode
         self.gui.game_over()
 
     def buttons_option_mode(self):
@@ -247,9 +265,8 @@ class MainWindow(Window):
         self.options_button.config(command=self.options)
         self.exit_button.config(command=self.destroy)
 
-    def options(self):
+    def options(self): # button command
         self.buttons_option_mode()
-        # open_options_dialog()
 
         options_dialog = Window() # TODO: program a useful options dialog
         while options_dialog.update():
@@ -262,4 +279,3 @@ class MainWindow(Window):
                 raise err
 
         self.activate_buttons()
-        # raise NotImplementedError
