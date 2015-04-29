@@ -16,6 +16,7 @@ class TestPlayer(unittest.TestCase):
         self.height = 4 # must be even for this test_case
         self.board = Board(self.width, self.height)
         self.board_gui = BoardGui(self.board, tk.Tk())
+        self.board_gui.in_game = True
 
         self.white_player = Player(white)
         self.black_player = Player(black)
