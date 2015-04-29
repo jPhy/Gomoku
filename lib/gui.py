@@ -279,3 +279,5 @@ class MainWindow(Window):
                 raise err
 
         self.activate_buttons()
+        if not self.gui.in_game:
+            self.gui.game_over()
