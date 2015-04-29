@@ -63,3 +63,23 @@ class Human(Player):
         moves_left = gui.board.moves_left
         while gui.board.moves_left == moves_left and gui.in_game:
             gui.update()
+
+# player management
+available_player_types = [ Human ,  Player    ]
+available_player_names = ['Human', 'Stupid AI']
+def get_player_index(name, hint=None):
+    """
+    Convert the player name into an integer valued index.
+
+    :param name:
+        string; the name if the player that is listed in ``available_player_names``
+
+    :param hint:
+        integer, optional; the first index do be checked.
+
+    """
+    for i,n in enumerate(available_player_names):
+        if n == name:
+            return i
+    # the following is executed if the name is not found
+    raise ValueError('"%s" is not a registered player type' % name)

@@ -12,6 +12,8 @@ except ImportError:
     import tkinter as tk
     from tkinter.messagebox import Message
 
+from .player import available_player_names, available_player_types, get_player_index
+
 class Window(tk.Tk):
     "Wrapper for the basic window"
     def update(self, *args, **kwargs):
@@ -176,6 +178,13 @@ class MainWindow(Window):
 
         self.start_new_game = True
 
+        # set the players
+        # white_player = player.Human(board.white)
+        # self.white_player = player.Player(board.white)
+        # black_player = player.Human(board.black)
+        # self.black_player = player.Player(board.black)
+        self.white_player_idx = self.black_player_idx = 1
+
     def mainloop(self):
         # run until the user exits the program
         while True:
@@ -201,13 +210,8 @@ class MainWindow(Window):
         self.board.reset()
         self.gui.renew_board()
 
-        # set the players
-        # TODO: players should be customizable in options dialog
-        #       as arguments of ``play_game``?
-        # white_player = player.Human(board.white)
-        white_player = player.Player(board.white)
-        black_player = player.Human(board.black)
-        # black_player = player.Player(board.black)
+        white_player = available_player_types[self.white_player_idx](white)
+        black_player = available_player_types[self.black_player_idx](black)
 
         while True:
             white_player.make_move(self.gui)
@@ -268,7 +272,7 @@ class MainWindow(Window):
     def options(self): # button command
         self.buttons_option_mode()
 
-        options_dialog = OptionsDialog()
+        options_dialog = OptionsDialog(self.white_player_idx, self.black_player_idx)
         while options_dialog.update():
             try:
                 self.state()
@@ -277,6 +281,8 @@ class MainWindow(Window):
                     options_dialog.destroy()
                     return
                 raise err
+
+        self.white_player_idx , self.black_player_idx = options_dialog.get_players()
 
         self.activate_buttons()
         if not self.gui.in_game:
@@ -288,9 +294,12 @@ class OptionsDialog(Window):
     Return a dictionary of options.
 
     """
-    def __init__(self):
+    def __init__(self, current_white_player_index, current_black_player_index):
         Window.__init__(self)
         self.title('Gomoku - Options')
+
+        self.previous_white_player_index = current_white_player_index
+        self.previous_black_player_index = current_black_player_index
 
         width = 250
         height = 10
@@ -301,24 +310,21 @@ class OptionsDialog(Window):
         player_width  = 100
         player_height =  20
 
-        available_white_players = ('a', 'b', 'c')
-        available_black_players = ('x', 'y', 'z')
-
         self.cv_options = tk.Canvas(self)
         self.cv_options.pack()
 
         self.canvas_white_player = tk.Canvas(self.cv_options, width=player_width, height=player_height)
         self.canvas_white_player.create_text(40,10, text='white player')
         self.canvas_white_player.grid(column=0,row=0)
-        self.desired_white_player = tk.Variable(value='current value') # TODO: set old value here
-        self.dialog_white_player = tk.OptionMenu(self.cv_options, self.desired_white_player, *available_white_players)
+        self.desired_white_player = tk.Variable(value=available_player_names[current_white_player_index])
+        self.dialog_white_player = tk.OptionMenu(self.cv_options, self.desired_white_player, *available_player_names)
         self.dialog_white_player.grid(column=1,row=0)
 
         self.canvas_black_player = tk.Canvas(self.cv_options, width=player_width, height=player_height)
         self.canvas_black_player.create_text(40,10, text='black player')
         self.canvas_black_player.grid(column=0,row=1)
-        self.desired_black_player = tk.Variable(value='current value') # TODO: set old value here
-        self.dialog_black_player = tk.OptionMenu(self.cv_options, self.desired_black_player, *available_black_players)
+        self.desired_black_player = tk.Variable(value=available_player_names[current_black_player_index])
+        self.dialog_black_player = tk.OptionMenu(self.cv_options, self.desired_black_player, *available_player_names)
         self.dialog_black_player.grid(column=1,row=1)
 
         self.middlespace = tk.Canvas(self, height=height+5, width=width)
@@ -329,3 +335,9 @@ class OptionsDialog(Window):
 
         self.bottomspace = tk.Canvas(self, height=height, width=width)
         self.bottomspace.pack()
+
+    def get_players(self):
+        "Return the indices of the desired white and black player."
+        white_player_idx = get_player_index(self.desired_white_player.get(), hint=self.previous_white_player_index)
+        black_player_idx = get_player_index(self.desired_black_player.get(), hint=self.previous_black_player_index)
+        return (white_player_idx,black_player_idx)

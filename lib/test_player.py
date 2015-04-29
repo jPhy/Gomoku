@@ -34,3 +34,16 @@ class TestPlayer(unittest.TestCase):
             self.black_player.make_move(self.board_gui)
 
         np.testing.assert_equal(self.board.board.flatten(), np.array([white,black] * total_size))
+
+class TestPlayerManagement(unittest.TestCase):
+    def test_get_player_index(self):
+        found_indices = []
+        print(available_player_names)
+        found_indices.append( get_player_index('Human') ) # no hint
+        found_indices.append( get_player_index('Human', hint=0) ) # hint correct
+        found_indices.append( get_player_index('Human', hint=1) ) # hint wrong
+
+        for index in found_indices:
+            self.assertEqual(index, 0)
+
+        self.assertRaisesRegexp(ValueError, '"Foo".*not.*registered', get_player_index, 'Foo')
