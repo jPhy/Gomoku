@@ -60,9 +60,11 @@ class Human(Player):
     """
     def _make_move(self, gui):
         # wait for user input
+        gui.need_user_input = True
         moves_left = gui.board.moves_left
         while gui.board.moves_left == moves_left and gui.in_game:
             gui.update()
+        gui.need_user_input = False
 
 # player management
 available_player_types = [ Human ,  Player    ]

@@ -74,12 +74,16 @@ class BoardGui(object):
                 current_button = self.buttons[j,i] = tk.Button(window)
                 current_button.grid(row=i, column=j)
 
+        self.need_user_input = False # this variable is set True by the
+                                     # Human player ( ``Human.make_move()`` )
+
     def game_running_buttons(self):
         def button_command(i,j):
-            try:
-                self.board[j,i] = self.board.in_turn
-            except InvalidMoveError:
-                gui_invalid_move_message.show()
+            if self.need_user_input is True:
+                try:
+                    self.board[j,i] = self.board.in_turn
+                except InvalidMoveError:
+                    gui_invalid_move_message.show()
 
         for i in range(self.board.width):
             for j in range(self.board.height):
