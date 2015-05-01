@@ -49,8 +49,8 @@ class Player(object):
 
     def _make_move(self, gui):
         "Override this function for specific players"
-        for i in range(gui.board.shape[0]):
-            for j in range(gui.board.shape[1]):
+        for i in range(gui.board.height):
+            for j in range(gui.board.width):
                 try:
                     gui.board[i,j] = self.color
                     return
