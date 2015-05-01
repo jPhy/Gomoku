@@ -183,11 +183,20 @@ class MainWindow(Window):
         self.start_new_game = True
 
         # set the players
-        # white_player = player.Human(board.white)
-        # self.white_player = player.Player(board.white)
-        # black_player = player.Human(board.black)
-        # self.black_player = player.Player(board.black)
-        self.white_player_idx = self.black_player_idx = 1
+        # try reading from config file
+        # if that fails set to human
+        try:
+            from config import white_player
+        except ImportError:
+            white_player = 'Human'
+        try:
+            from config import black_player
+        except ImportError:
+            black_player = 'Human'
+
+        self.white_player_idx = get_player_index(white_player)
+        self.black_player_idx = get_player_index(black_player)
+
 
     def mainloop(self):
         # run until the user exits the program
@@ -287,6 +296,7 @@ class MainWindow(Window):
                 raise err
 
         self.white_player_idx , self.black_player_idx = options_dialog.get_players()
+        options_dialog.set_defaults_if_desired()
 
         self.activate_buttons()
         if not self.gui.in_game:
@@ -331,6 +341,14 @@ class OptionsDialog(Window):
         self.dialog_black_player = tk.OptionMenu(self.cv_options, self.desired_black_player, *available_player_names)
         self.dialog_black_player.grid(column=1,row=1)
 
+        self.thinspace = tk.Canvas(self, height=height+1, width=width)
+        self.thinspace.pack()
+
+        self.checkbutton_new_defaults = tk.Checkbutton(self, text='save as default', command=self.set_if_new_defaults_desired)
+        self.new_defaults_desired = False
+        self.checkbutton_new_defaults.deselect()
+        self.checkbutton_new_defaults.pack()
+
         self.middlespace = tk.Canvas(self, height=height+5, width=width)
         self.middlespace.pack()
 
@@ -339,6 +357,20 @@ class OptionsDialog(Window):
 
         self.bottomspace = tk.Canvas(self, height=height, width=width)
         self.bottomspace.pack()
+
+    def set_if_new_defaults_desired(self):
+        if self.new_defaults_desired:
+            self.new_defaults_desired = False
+            self.checkbutton_new_defaults.deselect()
+        else:
+            self.new_defaults_desired = True
+            self.checkbutton_new_defaults.select()
+
+    def set_defaults_if_desired(self):
+        if self.new_defaults_desired:
+            with open('config.py', 'w') as f:
+                f.write('white_player = "' + self.desired_white_player.get() + '"\n')
+                f.write('black_player = "' + self.desired_black_player.get() + '"\n')
 
     def get_players(self):
         "Return the indices of the desired white and black player."
