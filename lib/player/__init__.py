@@ -85,7 +85,7 @@ from os import listdir, path
 for filename in listdir(path.join('.', 'lib', 'player')):
     if filename[-3:] != '.py' or filename == '__init__.py':
         continue
-    exec('import ' + filename[:-3] + ' as playerlib')
+    exec('from . import ' + filename[:-3] + ' as playerlib')
     # search for classes derived from the base class ``Player``
     for objname in dir(playerlib):
         obj = playerlib.__dict__[objname]
