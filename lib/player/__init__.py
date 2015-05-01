@@ -83,7 +83,7 @@ class Human(Player):
 available_player_types = [Human, Player]
 from os import listdir, path
 for filename in listdir(path.join('.', 'lib', 'player')):
-    if filename[-3:] != '.py' or filename == '__init__.py':
+    if filename[-3:] != '.py' or filename == '__init__.py' or 'test' in filename:
         continue
     exec('from . import ' + filename[:-3] + ' as playerlib')
     # search for classes derived from the base class ``Player``
