@@ -14,7 +14,7 @@ class TestPlayer(unittest.TestCase):
     def setUp(self):
         self.width = 2 # must be even for this test_case
         self.height = 4 # must be even for this test_case
-        self.board = Board(self.width, self.height)
+        self.board = Board(width=self.width, height=self.height)
         self.board_gui = BoardGui(self.board, tk.Tk())
         self.board_gui.in_game = True
 
