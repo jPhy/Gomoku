@@ -1,16 +1,24 @@
-"Define the base class for players to be used in the game"
+'Gomoku players'
 
-from .board import InvalidMoveError
+from ..board import InvalidMoveError
 
+
+# base class
 class Player(object):
     """
-    Describtion of a player to be used in the Game
+    Describtion of a player to be used in the Game.
+    To implement your own AI, override the function
+    ``_make_move``.
+    .. important::
+        Note the leading underscore. Do *NOT* override ``make_move``.
+    The member string ``name`` appears in the options dialog.
 
     :param color:
 
         The color that the player plays as described in "board.py".
 
     """
+    name = 'Stupid AI'
     def __init__(self, color):
         self.color = color
 
@@ -49,6 +57,8 @@ class Player(object):
                 except InvalidMoveError:
                     pass
 
+
+# Human player
 class Human(Player):
     """
     A human player using a gui for input.
@@ -58,6 +68,7 @@ class Human(Player):
         The color that the player plays as described in "board.py".
 
     """
+    name = 'Human'
     def _make_move(self, gui):
         # wait for user input
         gui.need_user_input = True
@@ -66,9 +77,28 @@ class Human(Player):
             gui.update()
         gui.need_user_input = False
 
+
+
+# search for player types in all files of this folder
+available_player_types = [Human, Player]
+from os import listdir, path
+for filename in listdir(path.join('.', 'lib', 'player')):
+    if filename[-3:] != '.py' or filename == '__init__.py':
+        continue
+    exec('import ' + filename[:-3] + ' as playerlib')
+    # search for classes derived from the base class ``Player``
+    for objname in dir(playerlib):
+        obj = playerlib.__dict__[objname]
+        try:
+            to_check = (Player in obj.mro())
+        except AttributeError:
+            to_check = False
+        if to_check and obj not in available_player_types:
+            available_player_types.append(obj)
+
+
 # player management
-available_player_types = [ Human ,  Player    ]
-available_player_names = ['Human', 'Stupid AI']
+available_player_names = [player.name for player in available_player_types]
 def get_player_index(name, hint=None):
     """
     Convert the player name into an integer valued index.
