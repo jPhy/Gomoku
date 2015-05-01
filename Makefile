@@ -62,6 +62,9 @@ clean:
 	# remove dist/
 	rm -rf dist
 
+	# remove config file
+	rm -f config.py
+
 .PHONY : check
 check : check2 check3
 
