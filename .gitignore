@@ -25,3 +25,6 @@ nosetests.xml
 
 # test images
 *.png
+
+# config file
+/config.py
