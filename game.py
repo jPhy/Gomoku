@@ -14,6 +14,6 @@ class ErrorHandler(object):
         return False # reraise nonTcl errors
 
 if __name__ == '__main__':
-    main_window = lib.gui.MainWindow(16,13)
+    main_window = lib.gui.MainWindow(13,16)
     with ErrorHandler():
         main_window.mainloop()

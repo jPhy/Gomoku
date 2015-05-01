@@ -69,9 +69,9 @@ class BoardGui(object):
         self.window = window
 
         self.buttons = np.empty_like(board.board, dtype='object')
-        for i in range(self.board.width):
-            for j in range(self.board.height):
-                current_button = self.buttons[j,i] = tk.Button(window)
+        for i in range(self.board.height):
+            for j in range(self.board.width):
+                current_button = self.buttons[i,j] = tk.Button(window)
                 current_button.grid(row=i, column=j)
 
         self.need_user_input = False # this variable is set True by the
