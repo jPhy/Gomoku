@@ -1,10 +1,11 @@
 'Gomoku players'
 
 from ..board import InvalidMoveError
+from .lib import Playerlibrary
 
 
 # base class
-class Player(object):
+class Player(Playerlibrary):
     """
     Describtion of a player to be used in the Game.
     To implement your own AI, override the function
@@ -82,7 +83,14 @@ class Human(Player):
 # search for player types in all files of this folder
 available_player_types = [Human, Player]
 from os import listdir, path
-for filename in listdir(path.join('.', 'lib', 'player')):
+try:
+    listed_dir = listdir(path.join('.', 'lib', 'player'))
+except OSError:
+    try:
+        listed_dir = listdir(path.join('.',        'player'))
+    except OSError:
+        listed_dir = listdir(path.join('.',                ))
+for filename in listed_dir:
     if filename[-3:] != '.py' or filename == '__init__.py' or 'test' in filename:
         continue
     exec('from . import ' + filename[:-3] + ' as playerlib')
