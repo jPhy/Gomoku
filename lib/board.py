@@ -112,6 +112,8 @@ class Board(object):
 
     def get_diagonal_lowleft_to_upright(self, y, x):
         __doc__ = self.get_line_functions_docstring
+        if y-5 < 0:
+            raise IndexError()
         for i in range(5):
             self.line[i] = self[y-i,x+i]
         return self.line, [(y-i,x+i) for i in range(5)]

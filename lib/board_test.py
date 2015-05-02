@@ -162,3 +162,14 @@ class TestGetLine(unittest.TestCase):
         self.assertEqual(diagonal.shape, self.target_shape)
         np.testing.assert_equal(diagonal, np.array([white,empty,black,white,white]))
         self.assertEqual(positions, target_positions)
+
+        # no negative Y-index?
+        width = 7
+        height = 7
+        self.board = Board(width=width, height=height)
+        place_stone(self.board, white,  3,0)
+        place_stone(self.board, black,  2,1)
+        place_stone(self.board, white,  1,2)
+        place_stone(self.board, black,  0,3)
+        place_stone(self.board, white, -1,4)
+        self.assertRaises(IndexError, self.board.get_diagonal_lowleft_to_upright, 3,0)
