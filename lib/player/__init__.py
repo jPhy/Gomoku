@@ -1,5 +1,6 @@
 'Gomoku players'
 
+from __future__ import print_function
 from ..board import InvalidMoveError
 from .lib import Playerlibrary
 
@@ -83,25 +84,22 @@ class Human(Player):
 # search for player types in all files of this folder
 available_player_types = [Human, Player]
 from os import listdir, path
-try:
-    listed_dir = listdir(path.join('.', 'lib', 'player'))
-except OSError:
-    try:
-        listed_dir = listdir(path.join('.',        'player'))
-    except OSError:
-        listed_dir = listdir(path.join('.',                ))
-for filename in listed_dir:
-    if filename[-3:] != '.py' or filename == '__init__.py' or 'test' in filename:
-        continue
+player_directory = path.split(__file__)[0]
+print('Searching for players in', player_directory)
+filenames = listdir(player_directory)
+for filename in filenames:
+    if filename[-3:] != '.py' or 'test' in filename or \
+       filename == '__init__.py' or filename == 'lib.py':
+           continue
+    print('Processing', filename)
     exec('from . import ' + filename[:-3] + ' as playerlib')
     # search for classes derived from the base class ``Player``
     for objname in dir(playerlib):
         obj = playerlib.__dict__[objname]
-        try:
-            to_check = (Player in obj.mro())
-        except AttributeError:
-            to_check = False
-        if to_check and obj not in available_player_types:
+        if type(obj) is not type or obj in available_player_types:
+            continue
+        if issubclass(obj, Player):
+            print('    found', obj.name)
             available_player_types.append(obj)
 
 
