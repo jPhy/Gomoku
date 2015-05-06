@@ -4,56 +4,8 @@ import unittest
 import numpy as np
 from ..board import Board, black, white, empty
 from ..gui import BoardGui, tk
-from .lib import Playerlibrary
-
-def build_board(board_array):
-    """
-    Build up a valid ``GameBoard`` holding the desired ``board_array``.
-
-    :param board_array:
-
-        2D-array; e.g. [[white, empty],
-                        [black, black]]
-
-    """
-    board_array = np.asarray(board_array, dtype=int)
-    assert len(board_array.shape) == 2
-    height = board_array.shape[0]
-    width = board_array.shape[1]
-
-    board = Board(width=width, height=height)
-
-    white_indices = []
-    black_indices = []
-
-    # find positions that are not empty
-    for i in range(height):
-        for j in range(width):
-            value = board_array[i,j]
-            if value == empty:
-                continue
-            elif value == white:
-                white_indices.append((i,j))
-            elif value == black:
-                black_indices.append((i,j))
-            else:
-                raise AssertionError("Invalid ``board_array``")
-
-    # in a valid board, there are equally many black and white stones or
-    # one more white that black stone since white begins
-    assert len(white_indices) == len(black_indices) or len(white_indices) == len(black_indices) + 1
-
-    while black_indices:
-        board[white_indices.pop()] = white
-        board[black_indices.pop()] = black
-
-    assert board.winner()[0] is None
-
-    # if there is one more white stone
-    if white_indices:
-        board[white_indices.pop()] = white
-
-    return board
+from .lib import Playerlibrary, PlayerTest
+build_board = PlayerTest.build_board
 
 class TestBuildBoard(unittest.TestCase):
     def test_ensure_no_winner(self):
