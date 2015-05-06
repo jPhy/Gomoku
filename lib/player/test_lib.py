@@ -5,6 +5,7 @@ import numpy as np
 from ..board import Board, black, white, empty
 from ..gui import BoardGui, tk
 from .lib import Playerlibrary, PlayerTest
+build_gui   = PlayerTest.build_gui
 build_board = PlayerTest.build_board
 
 class TestBuildBoard(unittest.TestCase):
@@ -96,32 +97,26 @@ class TestPlayerlibrary(unittest.TestCase):
         ]
 
         for board_array in boards_to_test[:-1]:
-            board = build_board(board_array)
-            gui = BoardGui(board, tk.Tk())
-            gui.in_game = True
-            if board.in_turn == white:
+            gui = build_gui(board_array)
+            if gui.board.in_turn == white:
                 return_value = self.white_player.win_if_possible(gui)
-                self.assertEqual(board.winner()[0], white)
-            elif board.in_turn == black:
+                self.assertEqual(gui.board.winner()[0], white)
+            elif gui.board.in_turn == black:
                 return_value = self.black_player.win_if_possible(gui)
-                self.assertEqual(board.winner()[0], black)
+                self.assertEqual(gui.board.winner()[0], black)
             else:
                 raise RuntimeError('FATAL ERROR')
             self.assertTrue(return_value)
 
-        board = build_board(boards_to_test[-1])
+        gui = build_gui(boards_to_test[-1])
         return_value = self.black_player.win_if_possible(gui)
         self.assertFalse(return_value)
-        self.assertEqual(board.moves_left, 52)
+        self.assertEqual(gui.board.moves_left, 52)
 
     def test_random_move(self):
         height = 10
         width = 20
-        board = build_board(np.zeros((height,width)))
-        gui = BoardGui(board, tk.Tk())
-        gui.in_game = True
-        # TODO: since the gui is neede for player.make_move(),
-        #       these three lines should become a function
+        gui = build_gui(np.zeros((height,width)))
 
         total_number_of_fields = height * width
         assert total_number_of_fields % 2 == 0 # need an even number for following loop

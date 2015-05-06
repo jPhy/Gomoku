@@ -76,6 +76,10 @@ class PlayerTest(unittest.TestCase):
         """
         Build up a valid ``GameBoard`` holding the desired ``board_array``.
 
+        .. note::
+
+            You probably rather need `.build_gui`
+
         :param board_array:
 
             2D-array; e.g. [[white, empty],
@@ -120,6 +124,25 @@ class PlayerTest(unittest.TestCase):
             board[white_indices.pop()] = white
 
         return board
+
+    @classmethod
+    def build_gui(self, board_array):
+        """
+        Build up a valid ``GameBoard`` packed in a ``BoardGui`` holding
+        the desired ``board_array``. The returned instance of ``BoardGui``
+        is ready to use in ``Player.make_move()``.
+
+        :param board_array:
+
+            2D-array; e.g. [[white, empty],
+                            [black, black]]
+
+        """
+        from ..gui import BoardGui, tk
+        board = self.build_board(board_array)
+        gui = BoardGui(board, tk.Tk())
+        gui.in_game = True
+        return gui
 
     def base_test(self):
         width = 20
