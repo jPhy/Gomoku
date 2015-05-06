@@ -47,7 +47,7 @@ class Player(Playerlibrary):
             return
 
         if not moves_left - 1 == gui.board.moves_left:
-            raise RuntimeError('Could not find any valid move')
+            raise InvalidMoveError('Player "%s" did not place a stone.' % self.name)
 
     def _make_move(self, gui):
         "Override this function for specific players"

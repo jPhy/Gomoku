@@ -24,7 +24,7 @@ class TestPlayer(unittest.TestCase):
     def test_base_error(self):
         self.white_player.make_move(self.board_gui)
 
-        self.assertRaisesRegexp(RuntimeError, 'Could not find any valid move', self.white_player.make_move, self.board_gui)
+        self.assertRaisesRegexp(InvalidMoveError, '.*did not place a stone.', self.white_player.make_move, self.board_gui)
 
     def test_moves(self):
         total_size = self.width * self.height // 2
