@@ -20,7 +20,6 @@ class Player(Playerlibrary):
         The color that the player plays as described in "board.py".
 
     """
-    name = 'Stupid AI'
     def __init__(self, color):
         self.color = color
 
@@ -51,13 +50,7 @@ class Player(Playerlibrary):
 
     def _make_move(self, gui):
         "Override this function for specific players"
-        for i in range(gui.board.height):
-            for j in range(gui.board.width):
-                try:
-                    gui.board[i,j] = self.color
-                    return
-                except InvalidMoveError:
-                    pass
+        raise NotImplementedError
 
 
 # Human player
@@ -82,7 +75,7 @@ class Human(Player):
 
 
 # search for player types in all files of this folder
-available_player_types = [Human, Player]
+available_player_types = [Human]
 from os import listdir, path
 player_directory = path.split(__file__)[0]
 print('Searching for players in', player_directory)
@@ -98,7 +91,7 @@ for filename in filenames:
         obj = playerlib.__dict__[objname]
         if type(obj) is not type or obj in available_player_types:
             continue
-        if issubclass(obj, Player):
+        if issubclass(obj, Player) and obj is not Player:
             print('    found', obj.name)
             available_player_types.append(obj)
 
