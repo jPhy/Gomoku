@@ -173,3 +173,16 @@ class TestGetLine(unittest.TestCase):
         place_stone(self.board, black,  0,3)
         place_stone(self.board, white, -1,4)
         self.assertRaises(IndexError, self.board.get_diagonal_lowleft_to_upright, 3,0)
+
+        # reach upmost row?
+        width = 7
+        height = 7
+        self.board = Board(width=width, height=height)
+        place_stone(self.board, white, 4,0)
+        place_stone(self.board, black, 3,1)
+        place_stone(self.board, white, 2,2)
+        place_stone(self.board, black, 1,3)
+        place_stone(self.board, white, 0,4)
+        line, positions = self.board.get_diagonal_lowleft_to_upright(4,0)
+        np.testing.assert_equal(line, [white, black, white, black, white])
+        np.testing.assert_equal(positions, [(4,0), (3,1), (2,2), (1,3), (0,4)])
