@@ -113,3 +113,21 @@ class TestPlayerlibrary(unittest.TestCase):
         return_value = self.black_player.win_if_possible(gui)
         self.assertFalse(return_value)
         self.assertEqual(board.moves_left, 52)
+
+    def test_random_move(self):
+        height = 10
+        width = 20
+        board = build_board(np.zeros((height,width)))
+        gui = BoardGui(board, tk.Tk())
+        gui.in_game = True
+        # TODO: since the gui is neede for player.make_move(),
+        #       these three lines should become a function
+
+        total_number_of_fields = height * width
+        assert total_number_of_fields % 2 == 0 # need an even number for following loop
+        for i in range(total_number_of_fields // 2):
+            self.assertEqual(gui.board.board.sum(), 0)
+            self.white_player.random_move(gui)
+            self.assertEqual(gui.board.board.sum(), -1)
+            self.black_player.random_move(gui)
+            self.assertEqual(gui.board.board.sum(), 0)

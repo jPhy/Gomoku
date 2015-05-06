@@ -1,6 +1,6 @@
 "Define basic subroutines useful for all AI players"
 
-from ..board import black, white, empty, Board
+from ..board import black, white, empty, Board, InvalidMoveError
 import numpy as np
 import unittest
 
@@ -15,6 +15,16 @@ class Playerlibrary(object):
     looks like e.g. ``self.win_if_possible(gui)``.
 
     """
+    def random_move(self, gui):
+        moves_left = gui.board.moves_left
+        while moves_left == gui.board.moves_left:
+            x = np.random.randint(gui.board.width)
+            y = np.random.randint(gui.board.height)
+            try:
+                gui.board[y,x] = self.color
+            except InvalidMoveError:
+                continue
+
     def win_if_possible(self, gui):
         """
         Place a stone where the player wins immediately if possible.
