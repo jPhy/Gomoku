@@ -79,7 +79,7 @@ class TestPlayerlibrary(unittest.TestCase):
              [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
              [empty, empty, empty, empty, empty, black, empty, empty, empty, empty]],
 
-            # diagonal - whtie
+            # diagonal - white
             [[empty, empty, empty, empty, empty, black, empty, empty, empty, empty],
              [empty, empty, empty, empty, empty, empty, empty, white, empty, empty],
              [empty, black, empty, empty, empty, empty, white, empty, empty, empty],
@@ -87,7 +87,7 @@ class TestPlayerlibrary(unittest.TestCase):
              [empty, empty, empty, empty, white, empty, black, empty, empty, empty],
              [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]],
 
-            # not immediately winnable - whtie
+            # not immediately winnable - white
             [[empty, empty, empty, empty, empty, black, empty, empty, empty, empty],
              [empty, empty, empty, empty, empty, empty, empty, white, empty, empty],
              [empty, black, empty, empty, empty, empty, empty, empty, empty, empty],
@@ -123,6 +123,6 @@ class TestPlayerlibrary(unittest.TestCase):
         for i in range(total_number_of_fields // 2):
             self.assertEqual(gui.board.board.sum(), 0)
             self.white_player.random_move(gui)
-            self.assertEqual(gui.board.board.sum(), -1)
+            self.assertEqual(gui.board.board.sum(), white)
             self.black_player.random_move(gui)
             self.assertEqual(gui.board.board.sum(), 0)
