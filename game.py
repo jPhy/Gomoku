@@ -16,7 +16,7 @@ class ErrorHandler(object):
         # else:
         # GUIify errors
         if issubclass(error_type, Exception): # Only catch real exceptions not ``BaseException``
-            lib.gui.Message(message=repr(error_args), icon='warning', title='Gomoku - error').show()
+            lib.gui.Message(message=repr(error_args), icon='warning', title='Gomoku - Error').show()
         return False # reraise nonTcl errors => stderr message and nonzero exit
 
 if __name__ == '__main__':
