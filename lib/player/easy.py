@@ -1,9 +1,9 @@
 from . import Player, InvalidMoveError
 import numpy as np
 
-class Random(Player):
+class Easy(Player):
     "An AI that randomly places stones."
-    name = 'Random AI'
+    name = 'Easy'
     def _make_move(self, gui):
         if self.win_if_possible(gui):
             return
