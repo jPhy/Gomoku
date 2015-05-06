@@ -18,7 +18,7 @@ Tutorial how to implement an AI
     You can check the color your player is demanded to play as
     ``self.color == black/white`` where black and white (and ``empty``)
     are to be imported as ``from ..board import black, white, empty``.
-    The boards already lying on the board can be accessed via
+    The stones already lying on the board can be accessed via
     ``gui.board[i,j] == black/white/empty``. In addition, there
     are functions like get_line, get_column, ... (see class ``Board``).
     The full board as numpy array is available via ``gui.board.board``.
