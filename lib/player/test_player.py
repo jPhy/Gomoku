@@ -6,9 +6,9 @@ try:
     import Tkinter as tk # python 2
 except ImportError:
     import tkinter as tk # python 3
-from .board import Board, black, white
-from .gui import BoardGui
-from .player import *
+from ..board import Board, black, white
+from ..gui import BoardGui
+from . import *
 
 class TestPlayer(unittest.TestCase):
     def setUp(self):
