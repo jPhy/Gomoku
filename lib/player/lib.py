@@ -15,6 +15,11 @@ class Playerlibrary(object):
     looks like e.g. ``self.win_if_possible(gui)``.
 
     """
+    line_getter_functions = lambda self, gui: [gui.board.get_column, gui.board.get_row,
+                                               gui.board.get_diagonal_upleft_to_lowright,
+                                               gui.board.get_diagonal_lowleft_to_upright]
+
+
     def random_move(self, gui):
         moves_left = gui.board.moves_left
         while moves_left == gui.board.moves_left:
@@ -31,13 +36,9 @@ class Playerlibrary(object):
         Return ``True`` if a stone has been placed, otherwise return False.
 
         """
-        line_getter_functions = [gui.board.get_column, gui.board.get_row,
-                                 gui.board.get_diagonal_upleft_to_lowright,
-                                 gui.board.get_diagonal_lowleft_to_upright]
-
         for i in range(gui.board.height):
             for j in range(gui.board.width):
-                for f in line_getter_functions:
+                for f in self.line_getter_functions(gui):
                     try:
                         line, positions = f(i,j)
                     except IndexError:
