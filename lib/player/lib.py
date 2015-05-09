@@ -51,6 +51,30 @@ class Playerlibrary(object):
 
         return False
 
+    def extend_three_to_four(self, gui):
+        """
+        Extend a line of three stones to a line of four stones but only
+        if there is enough space to be completed to five.
+
+        """
+        for i in range(gui.board.height):
+            for j in range(gui.board.width):
+                for f in self.line_getter_functions(gui):
+                    try:
+                        line, positions = f(i,j)
+                    except IndexError:
+                        continue
+                    # selection: search three of own color and two empty
+                    if len(np.where(line == empty)[0]) == 2 and len(np.where(line == self.color)[0]) == 3:
+                        indices_empty = np.where(line == empty)[0]
+                        if 0 not in indices_empty:
+                            gui.board[positions[indices_empty[0]]] = self.color
+                            return True
+                        else:
+                            gui.board[positions[indices_empty[1]]] = self.color
+                            return True
+        return False
+
     def win_if_possible(self, gui):
         """
         Place a stone where the player wins immediately if possible.

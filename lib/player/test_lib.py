@@ -127,6 +127,29 @@ class TestPlayerlibrary(unittest.TestCase):
             self.black_player.random_move(gui)
             self.assertEqual(gui.board.board.sum(), 0)
 
+    def test_extend_three_to_four(self):
+        gui = build_gui([[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, black, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, black, empty, empty, empty, white, white, empty, empty],
+                         [empty, empty, empty, empty, white, empty, empty, white, empty, empty],
+                         [empty, black, black, empty, empty, empty, empty, white, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]])
+
+        target_board_after_moves = np.array \
+                (
+                        [[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, black, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, black, empty, empty, empty, white, white, empty, empty],
+                         [empty, empty, black, empty, white, empty, empty, white, empty, empty],
+                         [empty, black, black, empty, empty, empty, empty, white, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]]
+                )
+
+        black_return = self.black_player.extend_three_to_four(gui)
+
+        self.assertTrue(black_return)
+        np.testing.assert_equal(gui.board.board, target_board_after_moves)
+
     def test_block_doubly_open_two(self):
         gui = build_gui([[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
                          [empty, empty, black, empty, empty, empty, empty, empty, empty, empty],
