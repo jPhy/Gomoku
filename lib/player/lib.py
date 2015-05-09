@@ -30,6 +30,27 @@ class Playerlibrary(object):
             except InvalidMoveError:
                 continue
 
+    def block_doubly_open_two(self, gui):
+        "Block a line of two if both sides are open."
+        for i in range(gui.board.height):
+            for j in range(gui.board.width):
+                for f in self.line_getter_functions(gui):
+                    try:
+                        line, positions = f(i,j)
+                    except IndexError:
+                        continue
+
+                    # select pattern [<all empty>, <opponent's color>, <opponent's color>, <all empty>]
+                    if ( line == (empty, -self.color, -self.color, empty, empty) ).all():
+                        gui.board[positions[3]] = self.color
+                        return True
+
+                    elif ( line == (empty, empty, -self.color, -self.color, empty) ).all():
+                        gui.board[positions[1]] = self.color
+                        return True
+
+        return False
+
     def win_if_possible(self, gui):
         """
         Place a stone where the player wins immediately if possible.

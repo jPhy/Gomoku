@@ -126,3 +126,28 @@ class TestPlayerlibrary(unittest.TestCase):
             self.assertEqual(gui.board.board.sum(), white)
             self.black_player.random_move(gui)
             self.assertEqual(gui.board.board.sum(), 0)
+
+    def test_block_doubly_open_two(self):
+        gui = build_gui([[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, black, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, black, empty, empty, empty, white, empty, empty, empty],
+                         [empty, empty, empty, empty, white, empty, empty, empty, empty, empty],
+                         [empty, black, empty, empty, empty, empty, empty, white, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]])
+
+        target_board_after_moves = np.array \
+                (
+                        [[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, black, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, black, empty, empty, empty, white, empty, empty, empty],
+                         [empty, empty, white, empty, white, empty, empty, empty, empty, empty],
+                         [empty, black, empty, empty, empty, empty, empty, white, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]]
+                )
+
+        white_return = self.white_player.block_doubly_open_two(gui)
+        black_return = self.black_player.block_doubly_open_two(gui)
+
+        self.assertTrue(white_return) # white can block open two
+        self.assertFalse(black_return) # black has no open two to block
+        np.testing.assert_equal(gui.board.board, target_board_after_moves)
