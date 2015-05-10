@@ -113,6 +113,28 @@ class Playerlibrary(object):
 
         return False
 
+    def block_twice_two_to_three(self, gui):
+        'Prevent opponent from closing two lines of three simultaneously.'
+        line_positions = []
+        getter_functions = []
+        for i in range(gui.board.height):
+            for j in range(gui.board.width):
+                for f in self.line_getter_functions(gui):
+                    try:
+                        line, positions = f(i,j)
+                    except IndexError:
+                        continue
+                    # search two of opponent's color and three empty in two crossing lines at an empty position
+                    if len(np.where(line == empty)[0]) == 3 and len(np.where(line == -self.color)[0]) == 2:
+                        for oldpos, old_getter in zip(line_positions, getter_functions):
+                            for pos in positions:
+                                if f != old_getter and pos in oldpos and gui.board[pos] == empty:
+                                    gui.board[pos] = self.color
+                                    return True
+                        line_positions.append(positions)
+                        getter_functions.append(f)
+        return False
+
     def block_open_three(self, gui):
         "Block a line of three."
         for i in range(gui.board.height):
