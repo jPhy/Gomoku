@@ -273,7 +273,7 @@ class TestPlayerlibrary(unittest.TestCase):
         black_return = self.black_player.block_doubly_open_three(gui)
         white_return = self.white_player.block_doubly_open_three(gui)
 
-        self.assertTrue(black_return) # whtie has a doubly open line of three to be blocked
+        self.assertTrue(black_return) # white has a doubly open line of three to be blocked
         np.testing.assert_equal(gui.board.board, target_board_after_moves)
 
         self.assertFalse(white_return) # black's line of three is already blocked on one side

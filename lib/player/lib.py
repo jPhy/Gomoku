@@ -212,7 +212,7 @@ class Playerlibrary(object):
                     if len(np.where(line == empty)[0]) == 3 and len(np.where(line == self.color)[0]) == 2:
                         for oldpos, old_getter in zip(line_positions, getter_functions):
                             for pos in positions:
-                                if f is not old_getter and pos in oldpos and gui.board[pos] == empty:
+                                if f != old_getter and pos in oldpos and gui.board[pos] == empty:
                                     gui.board[pos] = self.color
                                     return True
                         line_positions.append(positions)
