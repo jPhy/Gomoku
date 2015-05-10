@@ -30,6 +30,23 @@ class Playerlibrary(object):
             except InvalidMoveError:
                 continue
 
+    def block_open_four(self, gui):
+        "Block a line of four stones if at least one end open."
+        for i in range(gui.board.height):
+            for j in range(gui.board.width):
+                for f in self.line_getter_functions(gui):
+                    try:
+                        line, positions = f(i,j)
+                    except IndexError:
+                        continue
+
+                    # selection: search four of opponent's color and one empty
+                    if len(np.where(line == empty)[0]) == 1 and len(np.where(line == -self.color)[0]) == 4:
+                        index_of_empty = np.where(line == empty)[0][0]
+                        gui.board[positions[index_of_empty]] = self.color
+                        return True
+        return False
+
     def block_doubly_open_two(self, gui):
         "Block a line of two if both sides are open."
         for i in range(gui.board.height):
