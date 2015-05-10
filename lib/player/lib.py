@@ -69,7 +69,7 @@ class Playerlibrary(object):
         return False
 
     def block_open_three(self, gui):
-        "Block a line of two if both sides are open."
+        "Block a line of three."
         for i in range(gui.board.height):
             for j in range(gui.board.width):
                 for f in self.line_getter_functions(gui):
@@ -87,6 +87,21 @@ class Playerlibrary(object):
                         else:
                             gui.board[positions[indices_empty[1]]] = self.color
                             return True
+        return False
+
+    def block_doubly_open_three(self, gui):
+        "Block a line of three but only if both sides are open."
+        for i in range(gui.board.height):
+            for j in range(gui.board.width):
+                for f in self.line_getter_functions(gui):
+                    try:
+                        line, positions = f(i,j)
+                    except IndexError:
+                        continue
+
+                    if ( line == (empty, -self.color, -self.color, -self.color, empty) ).all():
+                        gui.board[positions[0]] = self.color
+                        return True
         return False
 
     def extend_three_to_four(self, gui):

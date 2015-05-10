@@ -198,6 +198,33 @@ class TestPlayerlibrary(unittest.TestCase):
         self.assertFalse(black_return) # black has no open two to block
         np.testing.assert_equal(gui.board.board, target_board_after_moves)
 
+    def test_block_doubly_open_three(self):
+        gui = build_gui([[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, white, black, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, empty, white, black, empty, empty, empty, empty, empty],
+                         [empty, empty, empty, empty, white, black, empty, empty, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, white, empty, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]])
+
+        target_board_after_moves = np.array \
+                (
+                        [[empty, black, empty, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, white, black, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, empty, white, black, empty, empty, empty, empty, empty],
+                         [empty, empty, empty, empty, white, black, empty, empty, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, white, empty, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]]
+                )
+
+        black_return = self.black_player.block_doubly_open_three(gui)
+        white_return = self.white_player.block_doubly_open_three(gui)
+
+        self.assertTrue(black_return) # whtie has a doubly open line of three to be blocked
+        np.testing.assert_equal(gui.board.board, target_board_after_moves)
+
+        self.assertFalse(white_return) # black's line of three is already blocked on one side
+        np.testing.assert_equal(gui.board.board, target_board_after_moves)
+
     def test_block_open_three(self):
         gui = build_gui([[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
                          [empty, empty, white, empty, black, empty, empty, empty, empty, empty],
