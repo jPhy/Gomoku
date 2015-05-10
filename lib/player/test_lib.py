@@ -220,3 +220,26 @@ class TestPlayerlibrary(unittest.TestCase):
 
         self.assertTrue(black_return)
         np.testing.assert_equal(gui.board.board, target_board_after_moves)
+
+    def test_extend_twice_two_to_three(self):
+        gui = build_gui([[empty, empty, empty, white, empty, empty, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, white, empty, black, empty, empty, black, empty],
+                         [empty, empty, empty, empty, black, empty, white, empty],
+                         [empty, empty, empty, white, black, empty, empty, empty],
+                         [empty, empty, white, empty, empty, empty, empty, empty]])
+
+        target_board_after_moves = np.array \
+                (
+                        [[empty, empty, empty, white, empty, empty, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, white, empty, black, black, empty, black, empty],
+                         [empty, empty, empty, empty, black, empty, white, empty],
+                         [empty, empty, empty, white, black, empty, empty, empty],
+                         [empty, empty, white, empty, empty, empty, empty, empty]]
+                )
+
+        black_return = self.black_player.extend_twice_two_to_three(gui)
+
+        self.assertTrue(black_return)
+        np.testing.assert_equal(gui.board.board, target_board_after_moves)

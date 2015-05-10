@@ -116,6 +116,32 @@ class Playerlibrary(object):
                         return True
         return False
 
+    def extend_twice_two_to_three(self, gui):
+        """
+        Extend two crossing lines of two stones to two lines of three
+        stones but only if there is enough space to be completed to five.
+
+        """
+        line_positions = []
+        getter_functions = []
+        for f in self.line_getter_functions(gui):
+            for i in range(gui.board.height):
+                for j in range(gui.board.width):
+                    try:
+                        line, positions = f(i,j)
+                    except IndexError:
+                        continue
+                    # search two of own color and three empty in two crossing lines at an empty position
+                    if len(np.where(line == empty)[0]) == 3 and len(np.where(line == self.color)[0]) == 2:
+                        for oldpos, old_getter in zip(line_positions, getter_functions):
+                            for pos in positions:
+                                if f is not old_getter and pos in oldpos and gui.board[pos] == empty:
+                                    gui.board[pos] = self.color
+                                    return True
+                        line_positions.append(positions)
+                        getter_functions.append(f)
+        return False
+
     def win_if_possible(self, gui):
         """
         Place a stone where the player wins immediately if possible.
