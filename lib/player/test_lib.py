@@ -175,6 +175,29 @@ class TestPlayerlibrary(unittest.TestCase):
         self.assertFalse(black_return) # black has no open two to block
         np.testing.assert_equal(gui.board.board, target_board_after_moves)
 
+    def test_block_open_three(self):
+        gui = build_gui([[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, white, empty, black, empty, empty, empty, empty, empty],
+                         [empty, empty, empty, white, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, empty, empty, white, empty, empty, black, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]])
+
+        target_board_after_moves = np.array \
+                (
+                        [[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, white, empty, black, empty, empty, empty, empty, empty],
+                         [empty, empty, empty, white, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, empty, empty, white, empty, empty, black, empty, empty],
+                         [empty, empty, empty, empty, empty, black, empty, empty, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]]
+                )
+
+        black_return = self.black_player.block_open_three(gui)
+
+        self.assertTrue(black_return) # white can block open two
+        np.testing.assert_equal(gui.board.board, target_board_after_moves)
+
     def test_extend_two_to_three(self):
         gui = build_gui([[empty, empty, empty, empty, empty, empty, empty, white, empty, empty],
                          [empty, empty, black, empty, empty, empty, empty, empty, empty, empty],

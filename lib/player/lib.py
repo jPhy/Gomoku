@@ -51,6 +51,27 @@ class Playerlibrary(object):
 
         return False
 
+    def block_open_three(self, gui):
+        "Block a line of two if both sides are open."
+        for i in range(gui.board.height):
+            for j in range(gui.board.width):
+                for f in self.line_getter_functions(gui):
+                    try:
+                        line, positions = f(i,j)
+                    except IndexError:
+                        continue
+
+                    # selection: search three of opponent's color and two empty
+                    if len(np.where(line == empty)[0]) == 2 and len(np.where(line == -self.color)[0]) == 3:
+                        indices_empty = np.where(line == empty)[0]
+                        if 0 not in indices_empty:
+                            gui.board[positions[indices_empty[0]]] = self.color
+                            return True
+                        else:
+                            gui.board[positions[indices_empty[1]]] = self.color
+                            return True
+        return False
+
     def extend_three_to_four(self, gui):
         """
         Extend a line of three stones to a line of four stones but only
