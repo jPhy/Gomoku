@@ -204,30 +204,6 @@ class TestPlayerlibrary(unittest.TestCase):
                          [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]])
         self.black_player.block_square(gui)
 
-    def test_block_twice_two_to_three(self):
-        gui = build_gui([[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
-                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
-                         [empty, empty, empty, white, white, empty, empty, black, empty, empty, empty],
-                         [empty, empty, white, empty, empty, empty, black, empty, empty, empty, empty],
-                         [empty, empty, empty, white, empty, empty, empty, empty, empty, empty, empty],
-                         [empty, empty, empty, empty, empty, empty, empty, black, empty, empty, empty]])
-
-        target_board_after_moves = np.array \
-                (
-                        [[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
-                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
-                         [empty, black, empty, white, white, empty, empty, black, empty, empty, empty],
-                         [empty, empty, white, empty, empty, empty, black, empty, empty, empty, empty],
-                         [empty, empty, empty, white, empty, empty, empty, empty, empty, empty, empty],
-                         [empty, empty, empty, empty, empty, empty, empty, black, empty, empty, empty]]
-                )
-
-        black_return = self.black_player.block_twice_two_to_three(gui)
-
-        self.assertTrue(black_return)
-        np.testing.assert_equal(gui.board.board, target_board_after_moves)
-
-
     def test_block_open_four(self):
         gui = build_gui([[empty, empty, empty, empty, white, empty, empty, empty, empty, empty],
                          [empty, empty, black, empty, empty, empty, empty, empty, empty, empty],
@@ -347,6 +323,29 @@ class TestPlayerlibrary(unittest.TestCase):
         black_return = self.black_player.extend_two_to_three(gui)
 
         self.assertTrue(black_return)
+        np.testing.assert_equal(gui.board.board, target_board_after_moves)
+
+    def test_block_twice_to_three_or_more(self):
+        gui = build_gui([[empty, empty, white, empty, empty, empty, empty, empty],
+                         [empty, white, empty, white, white, empty, empty, empty],
+                         [empty, black, empty, white, empty, empty, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, black, black, empty, empty, empty, empty],
+                         [empty, empty, black, empty, black, empty, empty, empty]])
+
+        target_board_after_moves = np.array \
+                (
+                        [[empty, empty, white, empty, empty, empty, empty, empty],
+                         [empty, white, empty, white, white, empty, empty, empty],
+                         [empty, black, empty, white, empty, empty, empty, empty],
+                         [empty, empty, white, empty, empty, empty, empty, empty],
+                         [empty, empty, black, black, empty, empty, empty, empty],
+                         [empty, empty, black, empty, black, empty, empty, empty]]
+                )
+
+        white_return = self.white_player.block_twice_to_three_or_more(gui)
+
+        self.assertTrue(white_return)
         np.testing.assert_equal(gui.board.board, target_board_after_moves)
 
     def test_extend_twice_two_to_three(self):

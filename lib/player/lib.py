@@ -113,8 +113,8 @@ class Playerlibrary(object):
 
         return False
 
-    def block_twice_two_to_three(self, gui):
-        'Prevent opponent from closing two lines of three simultaneously.'
+    def block_twice_to_three_or_more(self, gui):
+        'Prevent opponent from closing two lines of three or more simultaneously.'
         line_positions = []
         getter_functions = []
         for i in range(gui.board.height):
@@ -125,7 +125,8 @@ class Playerlibrary(object):
                     except IndexError:
                         continue
                     # search two of opponent's color and three empty in two crossing lines at an empty position
-                    if len(np.where(line == empty)[0]) == 3 and len(np.where(line == -self.color)[0]) == 2:
+                    opponent_stones_in_line = len(np.where(line == -self.color)[0])
+                    if opponent_stones_in_line >= 2 and len(np.where(line == empty)[0]) == 5 - opponent_stones_in_line:
                         for oldpos, old_getter in zip(line_positions, getter_functions):
                             for pos in positions:
                                 if f != old_getter and pos in oldpos and gui.board[pos] == empty:
