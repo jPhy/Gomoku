@@ -16,5 +16,8 @@ class Medium(Player):
         try:
             gui.board[gui.board.height // 2, gui.board.width // 2] = self.color; return
         except InvalidMoveError:
-            if self.extend_one(gui): return
-            self.random_move(gui)
+            try:
+                gui.board[gui.board.height // 2 + 1, gui.board.width // 2] = self.color; return
+            except InvalidMoveError:
+                if self.extend_one(gui): return
+                self.random_move(gui)
