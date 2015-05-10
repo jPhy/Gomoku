@@ -171,39 +171,6 @@ class TestPlayerlibrary(unittest.TestCase):
         self.assertTrue(black_return)
         np.testing.assert_equal(gui.board.board, target_board_after_moves)
 
-    def test_block_square(self):
-        gui = build_gui([[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
-                         [empty, empty, empty, empty, white, empty, black, empty, empty, empty],
-                         [empty, empty, empty, white, empty, white, empty, empty, empty, empty],
-                         [empty, empty, empty, black, white, empty, black, empty, empty, empty],
-                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
-                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]])
-
-        target_board_after_moves = np.array \
-                (
-                        [[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
-                         [empty, empty, empty, empty, white, empty, black, empty, empty, empty],
-                         [empty, empty, empty, white, black, white, empty, empty, empty, empty],
-                         [empty, empty, empty, black, white, empty, black, empty, empty, empty],
-                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
-                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]]
-                )
-
-        black_return = self.black_player.block_square(gui)
-
-        self.assertTrue(black_return)
-        np.testing.assert_equal(gui.board.board, target_board_after_moves)
-
-
-        # no error if middle not empty?
-        gui = build_gui([[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
-                         [empty, empty, empty, empty, white, empty, black, empty, empty, empty],
-                         [empty, empty, empty, white, white, white, empty, empty, empty, empty],
-                         [empty, empty, empty, black, white, empty, black, empty, empty, empty],
-                         [empty, empty, empty, empty, black, empty, empty, empty, empty, empty],
-                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]])
-        self.black_player.block_square(gui)
-
     def test_block_open_four(self):
         gui = build_gui([[empty, empty, empty, empty, white, empty, empty, empty, empty, empty],
                          [empty, empty, black, empty, empty, empty, empty, empty, empty, empty],

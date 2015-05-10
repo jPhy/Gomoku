@@ -50,31 +50,6 @@ class Playerlibrary(object):
                             return True
         return False
 
-    def block_square(self, gui):
-        """
-        If own color is "x" and opponent plays "o", then do the
-        following move:
-
-        - - - - -          - - - - -
-        - - o - -          - - o - -
-        - o - o -    ->    - o x o -
-        - - o - -          - - o - -
-        - - - - -          - - - - -
-
-        """
-        pattern = np.array([[0, 1, 0],
-                            [1, 0, 1],
-                            [0, 1, 0]])
-        for i in range(gui.board.height):
-            for j in range(gui.board.width):
-                square = gui.board[i:i+3, j:j+3]
-                if not square.shape == (3,3): continue # occurs at the boundary
-                if not square[1,1] == empty: continue
-                if (square * pattern == pattern * -self.color).all():
-                    gui.board[i+1,j+1] = self.color
-                    return True
-        return False
-
     def block_open_four(self, gui):
         "Block a line of four stones if at least one end open."
         for i in range(gui.board.height):
