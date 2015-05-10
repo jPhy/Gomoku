@@ -30,6 +30,26 @@ class Playerlibrary(object):
             except InvalidMoveError:
                 continue
 
+    def extend_one(self, gui):
+        "Place a stone next to another one but only if extendable to five."
+        for i in range(gui.board.height):
+            for j in range(gui.board.width):
+                for f in self.line_getter_functions(gui):
+                    try:
+                        line, positions = f(i,j)
+                    except IndexError:
+                        continue
+                # search pattern: one of own color and four empty
+                    if len(np.where(line == empty)[0]) == 4 and len(np.where(line == self.color)[0]) == 1:
+                        index_own_color = np.where(line == self.color)[0][0]
+                        if index_own_color == 0:
+                            gui.board[positions[1]] = self.color
+                            return True
+                        else:
+                            gui.board[positions[index_own_color - 1]] = self.color
+                            return True
+        return False
+
     def block_open_four(self, gui):
         "Block a line of four stones if at least one end open."
         for i in range(gui.board.height):

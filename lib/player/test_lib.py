@@ -127,6 +127,27 @@ class TestPlayerlibrary(unittest.TestCase):
             self.black_player.random_move(gui)
             self.assertEqual(gui.board.board.sum(), 0)
 
+    def test_extend_one(self):
+        gui = build_gui([[empty, empty, empty],
+                         [empty, black, empty],
+                         [empty, empty, white],
+                         [empty, empty, empty],
+                         [empty, empty, empty]])
+
+        target_board_after_moves = np.array \
+                (
+                        [[empty, empty, empty],
+                         [empty, black, white],
+                         [empty, empty, white],
+                         [empty, empty, empty],
+                         [empty, empty, empty]]
+                )
+
+        white_return = self.white_player.extend_one(gui)
+
+        self.assertTrue(white_return)
+        np.testing.assert_equal(gui.board.board, target_board_after_moves)
+
     def test_extend_three_to_four(self):
         gui = build_gui([[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
                          [empty, empty, black, empty, empty, empty, empty, empty, empty, empty],
