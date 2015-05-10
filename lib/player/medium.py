@@ -6,6 +6,7 @@ class Medium(Player):
     def _make_move(self, gui):
         if self.win_if_possible(gui): return
         if self.block_open_four(gui): return
+        if self.block_square(gui): return
         if self.block_doubly_open_three(gui): return
         if self.extend_three_to_four(gui): return
         if self.block_open_three(gui): return
