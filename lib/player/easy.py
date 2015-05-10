@@ -12,4 +12,5 @@ class Easy(Player):
         try:
             gui.board[gui.board.height // 2, gui.board.width // 2] = self.color
         except InvalidMoveError:
+            if self.extend_one(gui): return
             self.random_move(gui)
