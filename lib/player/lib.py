@@ -15,9 +15,10 @@ class Playerlibrary(object):
     looks like e.g. ``self.win_if_possible(gui)``.
 
     """
-    line_getter_functions = lambda self, gui: [gui.board.get_column, gui.board.get_row,
-                                               gui.board.get_diagonal_upleft_to_lowright,
-                                               gui.board.get_diagonal_lowleft_to_upright]
+    def line_getter_functions(self, gui, length=5):
+        return [lambda x,y: gui.board.get_column(x,y,length=length), lambda x,y: gui.board.get_row(x,y, length=length),
+                lambda x,y: gui.board.get_diagonal_upleft_to_lowright(x,y, length=length),
+                lambda x,y: gui.board.get_diagonal_lowleft_to_upright(x,y, length=length)]
 
 
     def random_move(self, gui):

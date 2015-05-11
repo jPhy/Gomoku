@@ -38,7 +38,6 @@ class Board(object):
         self.width = int(width)
         self.shape = (self.height, self.width)
         self.board = np.zeros(self.shape, dtype='int8')
-        self.line = np.empty(5, dtype='int8')
 
         self.reset()
 
@@ -92,31 +91,35 @@ class Board(object):
 
     """
 
-    def get_column(self, y, x):
+    def get_column(self, y, x, length=5):
         __doc__ = self.get_line_functions_docstring
-        for i in range(5):
-            self.line[i] = self[y+i,x]
-        return self.line, [(y+i,x) for i in range(5)]
+        line = np.empty(length, dtype='int8')
+        for i in range(length):
+            line[i] = self[y+i,x]
+        return line, [(y+i,x) for i in range(length)]
 
-    def get_row(self, y, x):
+    def get_row(self, y, x, length=5):
         __doc__ = self.get_line_functions_docstring
-        for i in range(5):
-            self.line[i] = self[y,x+i]
-        return self.line, [(y,x+i) for i in range(5)]
+        line = np.empty(length, dtype='int8')
+        for i in range(length):
+            line[i] = self[y,x+i]
+        return line, [(y,x+i) for i in range(length)]
 
-    def get_diagonal_upleft_to_lowright(self, y, x):
+    def get_diagonal_upleft_to_lowright(self, y, x, length=5):
         __doc__ = self.get_line_functions_docstring
-        for i in range(5):
-            self.line[i] = self[y+i,x+i]
-        return self.line, [(y+i,x+i) for i in range(5)]
+        line = np.empty(length, dtype='int8')
+        for i in range(length):
+            line[i] = self[y+i,x+i]
+        return line, [(y+i,x+i) for i in range(length)]
 
-    def get_diagonal_lowleft_to_upright(self, y, x):
+    def get_diagonal_lowleft_to_upright(self, y, x, length=5):
         __doc__ = self.get_line_functions_docstring
-        if y < 4:
+        line = np.empty(length, dtype='int8')
+        if y < length - 1:
             raise IndexError
-        for i in range(5):
-            self.line[i] = self[y-i,x+i]
-        return self.line, [(y-i,x+i) for i in range(5)]
+        for i in range(length):
+            line[i] = self[y-i,x+i]
+        return line, [(y-i,x+i) for i in range(length)]
 
     def winner(self):
         """
