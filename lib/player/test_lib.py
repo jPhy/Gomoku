@@ -171,6 +171,32 @@ class TestPlayerlibrary(unittest.TestCase):
         self.assertTrue(black_return)
         np.testing.assert_equal(gui.board.board, target_board_after_moves)
 
+    def test_extend_three_to_doubly_open_four(self):
+        gui = build_gui([[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, black, empty, empty, empty, empty, black, empty, empty],
+                         [empty, empty, black, empty, empty, empty, white, white, empty, empty],
+                         [empty, empty, empty, empty, white, empty, empty, white, empty, empty],
+                         [empty, empty, black, empty, empty, empty, empty, white, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]])
+
+        target_board_after_moves = np.array \
+                (
+                        [[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
+                         [empty, empty, black, empty, empty, empty, empty, black, empty, empty],
+                         [empty, empty, black, empty, empty, empty, white, white, empty, empty],
+                         [empty, empty, black, empty, white, empty, empty, white, empty, empty],
+                         [empty, empty, black, empty, empty, empty, empty, white, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]]
+                )
+
+        black_return = self.black_player.extend_three_to_doubly_open_four(gui)
+        self.assertTrue(black_return)
+        np.testing.assert_equal(gui.board.board, target_board_after_moves)
+
+        white_return = self.white_player.extend_three_to_doubly_open_four(gui)
+        self.assertFalse(white_return)
+        np.testing.assert_equal(gui.board.board, target_board_after_moves)
+
     def test_block_open_four(self):
         gui = build_gui([[empty, empty, empty, empty, white, empty, empty, empty, empty, empty],
                          [empty, empty, black, empty, empty, empty, empty, empty, empty, empty],
