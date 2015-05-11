@@ -197,6 +197,29 @@ class Playerlibrary(object):
                             return True
         return False
 
+    def block_to_doubly_open_four(self, gui):
+        """
+        Prevent the opponent from getting a line of four with both ends
+        open.
+
+        """
+        for i in range(gui.board.height):
+            for j in range(gui.board.width):
+                for f in self.line_getter_functions(gui, length=6):
+                    try:
+                        line, positions = f(i,j)
+                    except IndexError:
+                        continue
+                    # selection: search pattern [empty, <extendable to 4 times opponent>, empty]
+                    if len(np.where(line == empty)[0]) == 3 and len(np.where(line == -self.color)[0]) == 3:
+                        indices_empty = np.where(line == empty)[0]
+                        if not (line[0] == empty and line[-1] == empty):
+                            continue
+                        else:
+                            gui.board[positions[indices_empty[1]]] = self.color
+                            return True
+        return False
+
     def extend_three_to_doubly_open_four(self, gui):
         """
         Extend a line of three stones to a line of four stones but only
