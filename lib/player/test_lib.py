@@ -220,6 +220,26 @@ class TestPlayerlibrary(unittest.TestCase):
         self.assertTrue(white_return)
         np.testing.assert_equal(gui.board.board, target_board_after_moves)
 
+
+    def test_block_open_two(self):
+        gui = build_gui([[empty, empty, empty, empty, empty],
+                         [empty, empty, black, black, empty],
+                         [empty, white, white, empty, empty],
+                         [empty, empty, empty, empty, empty]])
+
+        target_board_after_moves = np.array \
+                (
+                        [[empty, empty, empty, empty, empty],
+                         [empty, white, black, black, empty],
+                         [empty, white, white, empty, empty],
+                         [empty, empty, empty, empty, empty]]
+                )
+
+        white_return = self.white_player.block_open_two(gui)
+
+        self.assertTrue(white_return)
+        np.testing.assert_equal(gui.board.board, target_board_after_moves)
+
     def test_block_doubly_open_two(self):
         gui = build_gui([[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
                          [empty, empty, black, empty, empty, empty, empty, empty, empty, empty],

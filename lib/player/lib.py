@@ -133,6 +133,27 @@ class Playerlibrary(object):
                             return True
         return False
 
+    def block_open_two(self, gui):
+        "Block a line of two."
+        for i in range(gui.board.height):
+            for j in range(gui.board.width):
+                for f in self.line_getter_functions(gui):
+                    try:
+                        line, positions = f(i,j)
+                    except IndexError:
+                        continue
+                    # selection: search pattern [<all empty or bpundary>, opponent, opponent, <all empty or boundary>]
+                    if len(np.where(line == empty)[0]) == 3 and len(np.where(line == -self.color)[0]) == 2:
+                        indices_opponent = np.where(line == -self.color)[0]
+                        if indices_opponent[1] == indices_opponent[0] + 1:
+                            if indices_opponent[0] == 0:
+                                gui.board[positions[3]] = self.color
+                                return True
+                            else:
+                                gui.board[positions[indices_opponent[0]-1]] = self.color
+                                return True
+        return False
+
     def block_doubly_open_three(self, gui):
         "Block a line of three but only if both sides are open."
         for i in range(gui.board.height):
