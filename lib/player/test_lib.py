@@ -302,11 +302,11 @@ class TestPlayerlibrary(unittest.TestCase):
 
         target_board_after_moves = np.array \
                 (
-                        [[empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
+                        [[empty, black, empty, empty, empty, empty, empty, empty, empty, empty],
                          [empty, empty, white, empty, black, empty, empty, empty, empty, empty],
                          [empty, empty, empty, white, empty, empty, empty, empty, empty, empty],
                          [empty, empty, empty, empty, white, empty, empty, black, empty, empty],
-                         [empty, empty, empty, empty, empty, black, empty, empty, empty, empty],
+                         [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty],
                          [empty, empty, empty, empty, empty, empty, empty, empty, empty, empty]]
                 )
 

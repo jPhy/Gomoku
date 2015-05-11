@@ -125,12 +125,15 @@ class Playerlibrary(object):
 
                     # selection: search three of opponent's color and two empty
                     if len(np.where(line == empty)[0]) == 2 and len(np.where(line == -self.color)[0]) == 3:
-                        indices_empty = np.where(line == empty)[0]
-                        if 0 not in indices_empty:
-                            gui.board[positions[indices_empty[0]]] = self.color
+                        indices_opponent = np.where(line == -self.color)[0]
+                        if not (indices_opponent[1] == indices_opponent[0] + 1 and \
+                                indices_opponent[2] == indices_opponent[1] + 1):
+                                    continue
+                        if 0 not in indices_opponent:
+                            gui.board[positions[indices_opponent[0] - 1]] = self.color
                             return True
                         else:
-                            gui.board[positions[indices_empty[1]]] = self.color
+                            gui.board[positions[3]] = self.color
                             return True
         return False
 
