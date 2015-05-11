@@ -91,11 +91,12 @@ class Playerlibrary(object):
 
     def block_twice_to_three_or_more(self, gui):
         'Prevent opponent from closing two lines of three or more simultaneously.'
+        line_getter_functions = self.line_getter_functions(gui)
         line_positions = []
         getter_functions = []
         for i in range(gui.board.height):
             for j in range(gui.board.width):
-                for f in self.line_getter_functions(gui):
+                for f in line_getter_functions:
                     try:
                         line, positions = f(i,j)
                     except IndexError:
