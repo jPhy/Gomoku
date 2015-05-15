@@ -1,7 +1,7 @@
 "Unit tests for the Random player"
 
 from .lib import black, white, empty, PlayerTest
-from .hard import *
+from .c_hard import *
 
 class TestHard(PlayerTest):
     Player = Hard

@@ -80,6 +80,7 @@ from os import listdir, path
 player_directory = path.split(__file__)[0]
 print('Searching for players in', player_directory)
 filenames = listdir(player_directory)
+filenames.sort() # search in alphabetical order
 for filename in filenames:
     if filename[-3:] != '.py' or 'test' in filename or \
        filename == '__init__.py' or filename == 'lib.py':
