@@ -289,10 +289,11 @@ class Playerlibrary(object):
                         getter_functions.append(f)
         return False
 
-    def win_if_possible(self, gui):
+    def check_if_immediate_win_possible(self, gui):
         """
-        Place a stone where the player wins immediately if possible.
-        Return ``True`` if a stone has been placed, otherwise return False.
+        Check if it is possible to place a stone such thath the player wins
+        immediately.
+        Return the position to place the stone if possible, otherwise return None.
 
         """
         for i in range(gui.board.height):
@@ -310,11 +311,22 @@ class Playerlibrary(object):
                     if empty in line and line.sum() == self.color * 4:
                         for pos in positions:
                             if gui.board[pos] == empty:
-                                gui.board[pos] = self.color
-                                return True
-                        raise RuntimeError("Check the implementation of ``win_if_possible``.")
-        # control reaches this point only if no winning move is found
-        return False
+                                return pos
+                        raise RuntimeError("Check the implementation of ``check_if_immediate_win_possible``.")
+        # control reaches this point only if no winning move is found => return None
+
+    def win_if_possible(self, gui):
+        """
+        Place a stone where the player wins immediately if possible.
+        Return ``True`` if a stone has been placed, otherwise return False.
+
+        """
+        pos = self.check_if_immediate_win_possible(gui)
+        if pos is None:
+            return False
+        else:
+            gui.board[pos] = self.color
+            return True
 
 class PlayerTest(unittest.TestCase):
     """
