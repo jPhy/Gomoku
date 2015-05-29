@@ -47,6 +47,7 @@ class Board(object):
         self.in_turn = white
         if hasattr(self, 'lastmove'):
             del self.lastmove
+        self.log = []
 
     def __getitem__(self, key):
         return self.board[key]
@@ -58,6 +59,7 @@ class Board(object):
             self.moves_left -= 1
             self.board[key] = value
             self.lastmove = key
+            self.log.append(key)
 
         else: # invalid move
             if   self[key] != empty:
