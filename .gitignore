@@ -28,3 +28,7 @@ nosetests.xml
 
 # config file
 /config.py
+
+# oldlogs for adaptive player
+lib/player/learning/black.log
+lib/player/learning/white.log
