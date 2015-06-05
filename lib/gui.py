@@ -12,6 +12,7 @@ except ImportError:
     import tkinter as tk
     from tkinter.messagebox import Message
 
+from os import path
 from .player import available_player_names, available_player_types, get_player_index
 
 class Window(tk.Tk):
@@ -186,11 +187,11 @@ class MainWindow(Window):
         # try reading from config file
         # if that fails set to human
         try:
-            from config import white_player
+            from .config import white_player
         except ImportError:
             white_player = 'Human'
         try:
-            from config import black_player
+            from .config import black_player
         except ImportError:
             black_player = 'Human'
 
@@ -368,7 +369,7 @@ class OptionsDialog(Window):
 
     def set_defaults_if_desired(self):
         if self.new_defaults_desired:
-            with open('config.py', 'w') as f:
+            with open(path.join(path.split(__file__)[0], 'config.py'), 'w') as f:
                 f.write('white_player = "' + self.desired_white_player.get() + '"\n')
                 f.write('black_player = "' + self.desired_black_player.get() + '"\n')
 
