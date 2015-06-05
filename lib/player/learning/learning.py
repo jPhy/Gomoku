@@ -8,7 +8,7 @@ def dump_log(filename, old_log, new_log):
     new_log = [tuple(item) for item in new_log]
     with open(filepath, 'w') as f:
         f.write('log=')
-        f.write(repr(old_log + [new_log]))
+        f.write(repr([new_log] + old_log))
 
 def load_oldlog(filename):
     filepath = path.join(path.split(__file__)[0], filename)
