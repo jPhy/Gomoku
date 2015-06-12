@@ -105,31 +105,31 @@ class Learning(Player):
 
     def _make_move(self, gui):
         def place_stone():
-            if self.win_if_possible(gui): return
-            if self.stop_old_mistake(gui): return
-            if self.block_open_four(gui): return
-            if self.extend_three_to_doubly_open_four(gui): return
-            if self.block_to_doubly_open_four(gui): return
-            if self.block_doubly_open_three(gui): return
-            if self.block_twice_to_three_or_more(gui): return
-            if self.extend_three_to_four(gui): return
-            if self.block_open_three(gui): return
-            if self.extend_twice_two_to_three(gui): return
-            if self.block_doubly_open_two(gui): return
-            if self.block_open_two(gui): return
-            if self.extend_two_to_three(gui): return
+            if self.win_if_possible(gui): return True
+            if self.stop_old_mistake(gui): return False
+            if self.block_open_four(gui): return False
+            if self.extend_three_to_doubly_open_four(gui): return False
+            if self.block_to_doubly_open_four(gui): return False
+            if self.block_doubly_open_three(gui): return False
+            if self.block_twice_to_three_or_more(gui): return False
+            if self.extend_three_to_four(gui): return False
+            if self.block_open_three(gui): return False
+            if self.extend_twice_two_to_three(gui): return False
+            if self.block_doubly_open_two(gui): return False
+            if self.block_open_two(gui): return False
+            if self.extend_two_to_three(gui): return False
             try:
-                gui.board[gui.board.height // 2, gui.board.width // 2] = self.color; return
+                gui.board[gui.board.height // 2, gui.board.width // 2] = self.color; return False
             except InvalidMoveError:
                 try:
-                    gui.board[gui.board.height // 2 + 1, gui.board.width // 2] = self.color; return
+                    gui.board[gui.board.height // 2 + 1, gui.board.width // 2] = self.color; return False
                 except InvalidMoveError:
-                    if self.extend_one(gui): return
+                    if self.extend_one(gui): return False
                     self.random_move(gui)
 
-        place_stone()
+        winner_is_me = place_stone()
 
-        if self.check_oldlogs:
+        if self.check_oldlogs and not winner_is_me:
             move_to_make_opponent_win = self.get_move_to_make_opponent_win(gui)
             if move_to_make_opponent_win is not None:
                 dump_log(
