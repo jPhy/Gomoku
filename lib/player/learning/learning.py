@@ -106,11 +106,11 @@ class Learning(Player):
     def _make_move(self, gui):
         def place_stone():
             if self.win_if_possible(gui): return True
-            if self.stop_old_mistake(gui): return False
             if self.block_open_four(gui): return False
             if self.extend_three_to_doubly_open_four(gui): return False
             if self.block_to_doubly_open_four(gui): return False
             if self.block_doubly_open_three(gui): return False
+            if self.stop_old_mistake(gui): return False
             if self.block_twice_to_three_or_more(gui): return False
             if self.extend_three_to_four(gui): return False
             if self.block_open_three(gui): return False
